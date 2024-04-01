@@ -1,0 +1,226 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String     @id @default(uuid())
+  email            String     @unique
+  password         String
+  name             String
+  roleId           String
+  isVerified       Boolean    @default(false)
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+  institute        Institute?
+  receivedMessages Message[]  @relation("receiver")
+  sentMessages     Message[]  @relation("sender")
+  student          Student?
+  teacher          Teacher?
+  role             UserRole   @relation(fields: [roleId], references: [id])
+}
+
+model UserRole {
+  id          String @id @default(uuid())
+  name        String @unique
+  usersInRole User[]
+}
+
+model Student {
+  id                     String                        @id @default(uuid())
+  userId                 String                        @unique
+  instituteId            String
+  enrolledYear           Int
+  expectedGraduationYear Int?
+  recommends             String
+  payment                Unsupported("payment method")
+  teacherId              String?
+  appointments           Appointment[]
+  Teacher                Teacher?                      @relation(fields: [teacherId], references: [id])
+  institute              Institute                     @relation(fields: [instituteId], references: [id])
+  user                   User                          @relation(fields: [userId], references: [id])
+  suggestions            Suggestion[]
+  progress               UserProgress[]
+  coupons                Coupon[]                      @relation("CouponToStudent")
+  courses                Course[]                      @relation("CourseToStudent")
+}
+
+model Teacher {
+  id           String        @id @default(uuid())
+  userId       String        @unique
+  instituteId  String
+  income       Int           @default(0)
+  appointments Appointment[]
+  Student      Student[]
+  suggestions  Suggestion[]
+  institution  Institute     @relation(fields: [instituteId], references: [id], onDelete: Cascade)
+  user         User          @relation(fields: [userId], references: [id])
+  courses      Course[]      @relation("CourseToTeacher")
+}
+
+model Institute {
+  id          String    @id @default(uuid())
+  userId      String    @unique
+  name        String
+  website     String
+  phoneNumber String
+  income      Float     @default(0)
+  courses     Course[]
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  students    Student[]
+  teachers    Teacher[]
+}
+
+model Syllabus {
+  id           String   @id @default(uuid())
+  courseId     String
+  filepath     String
+  syllabusFile String   @unique
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  Course       Course[]
+}
+
+model Course {
+  id               String       @id @default(uuid())
+  title            String
+  description      String
+  categoryId       String
+  priceInCents     Int?
+  isPublished      Boolean      @default(false)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  syllabusId       String
+  instituteId      String
+  attachments      Attachment[]
+  chapters         Chapter[]
+  institute        Institute    @relation(fields: [instituteId], references: [id])
+  syllabus         Syllabus     @relation(fields: [syllabusId], references: [id])
+  category         Category     @relation(fields: [categoryId], references: [id])
+  purchases        Purchase[]
+  suggestions      Suggestion[]
+  studentsEnrolled Student[]    @relation("CourseToStudent")
+  courseTeachers   Teacher[]    @relation("CourseToTeacher")
+}
+
+model Category {
+  id      String   @id @default(uuid())
+  name    String   @unique
+  courses Course[]
+}
+
+model Attachment {
+  id        String   @id @default(uuid())
+  name      String
+  url       String
+  courseId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@index([courseId])
+}
+
+model Coupon {
+  id        String    @id @default(uuid())
+  code      String    @unique
+  discount  Int
+  validTill DateTime
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  usedBy    Student[] @relation("CouponToStudent")
+}
+
+model Suggestion {
+  id                String   @id @default(uuid())
+  title             String
+  description       String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  studentId         String
+  teacherId         String
+  courseId          String
+  suggestedCourse   Course   @relation(fields: [courseId], references: [id])
+  suggestedTeacher  Teacher  @relation(fields: [teacherId], references: [id])
+  suggestingStudent Student  @relation(fields: [studentId], references: [id])
+}
+
+model Appointment {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  startTime   DateTime
+  endTime     DateTime
+  studentId   String
+  teacherId   String
+  teacher     Teacher  @relation(fields: [teacherId], references: [id])
+  student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}
+
+model Message {
+  id         String   @id @default(uuid())
+  topic      String
+  text       String
+  sendTime   DateTime @default(now())
+  senderId   String
+  receiverId String
+  receiver   User     @relation("receiver", fields: [receiverId], references: [id])
+  sender     User     @relation("sender", fields: [senderId], references: [id])
+}
+
+model Chapter {
+  id           String         @id @default(uuid())
+  title        String
+  description  String?
+  videoUrl     String?
+  position     Int
+  isPublished  Boolean        @default(false)
+  isFree       Boolean        @default(false)
+  courseId     String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  course       Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  muxData      MuxData?
+  userProgress UserProgress[]
+
+  @@index([courseId])
+}
+
+model MuxData {
+  id         String  @id @default(uuid())
+  assetId    String
+  playbackId String?
+  chapterId  String  @unique
+  chapter    Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+}
+
+model UserProgress {
+  id          String   @id @default(uuid())
+  userId      String
+  chapterId   String
+  isCompleted Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  studentId   String?
+  Student     Student? @relation(fields: [studentId], references: [id])
+  chapter     Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, chapterId])
+  @@index([chapterId])
+}
+
+model Purchase {
+  id        String   @id @default(uuid())
+  userId    String
+  courseId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+  @@index([courseId])
+}
