@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 const guestRoutes = [
     {
-        icon: DoorOpen ,
+        icon: DoorOpen,
         label: "Home ",
         href: "/"
     },
@@ -19,7 +19,7 @@ const guestRoutes = [
         icon: UserSearch,
         label: "Find Teacher",
         href: "/teachers"
-    }
+    },
 ]
 
 const teacherRoutes = [

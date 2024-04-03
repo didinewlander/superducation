@@ -5,195 +5,400 @@ import Link from "next/link"
 import Image from "next/image"
 import { JSX, SVGProps } from "react"
 
-export default function Component() {
+
+import { Teacher, columns } from "./_components/columns"
+import { DataTable } from "./_components/TableData"
+
+async function getData(): Promise<Teacher[]> {
+  return [
+    {
+      id: "1",
+      name: "Dr. Janet Bmith",
+      institution: {
+        name: "Harvard University",
+        link: "#"
+      },
+      suggestions: 5,
+      courses: [
+        {
+          name: "Introduction to Quantum Mechanics",
+          link: "#"
+        },
+        {
+          name: "Quantum Physics: Concepts and Applications",
+          link: "#"
+        },
+        {
+          name: "Quantum Mechanics: The Strange World of Quantum Physics",
+          link: "#"
+        }
+      ],
+      imageUrl: "/placeholder.svg",
+      price: 250,
+    },
+    {
+      id: "2",
+      name: "Dr. Janet Smith",
+      institution: {
+        name: "Harvard University",
+        link: "#"
+      },
+      suggestions: 5,
+      courses: [
+        {
+          name: "Introduction to Quantum Mechanics",
+          link: "#"
+        },
+        {
+          name: "Quantum Physics: Concepts and Applications",
+          link: "#"
+        },
+        {
+          name: "Quantum Mechanics: The Strange World of Quantum Physics",
+          link: "#"
+        }
+      ],
+      imageUrl: "/placeholder.svg",
+      price: 200,
+
+    },      
+    {
+      id: "3",
+      name: "Dr. Janet Smith",
+      institution: {
+        name: "Harvard University",
+        link: "#"
+      },
+      price: 100,
+      suggestions: 5,
+      courses: [
+        {
+          name: "Introduction to Quantum Mechanics",
+          link: "#"
+        },
+        {
+          name: "Quantum Physics: Concepts and Applications",
+          link: "#"
+        },
+        {
+          name: "Quantum Mechanics: The Strange World of Quantum Physics",
+          link: "#"
+        }
+      ],
+      imageUrl: "/placeholder.svg"
+    },
+    {
+      id: "4",
+      name: "Dr. Janet Smith",
+      institution: {
+        name: "Harvard University",
+        link: "#"
+      },
+      suggestions: 5,
+      courses: [
+        {
+          name: "Introduction to Quantum Mechanics",
+          link: "#"
+        },
+        {
+          name: "Quantum Physics: Concepts and Applications",
+          link: "#"
+        },
+        {
+          name: "Quantum Mechanics: The Strange World of Quantum Physics",
+          link: "#"
+        }
+      ],
+      imageUrl: "/placeholder.svg",
+      price: 150,
+    },
+    {
+      id: "5",
+      name: "Dr. Janet Smith",
+      institution: {
+        name: "Harvard University",
+        link: "#"
+      },
+      suggestions: 5,
+      courses: [
+        {
+          name: "Introduction to Quantum Mechanics",
+          link: "#"
+        },
+        {
+          name: "Quantum Physics: Concepts and Applications",
+          link: "#"
+        },
+        {
+          name: "Quantum Mechanics: The Strange World of Quantum Physics",
+          link: "#"
+        }
+      ],
+      imageUrl: "/placeholder.svg",
+      price: 300,
+    },
+    {
+      id: "1",
+      name: "Dr. Janet Smith",
+      institution: {
+        name: "Harvard University",
+        link: "#"
+      },
+      suggestions: 5,
+      courses: [
+        {
+          name: "Introduction to Quantum Mechanics",
+          link: "#"
+        },
+        {
+          name: "Quantum Physics: Concepts and Applications",
+          link: "#"
+        },
+        {
+          name: "Quantum Mechanics: The Strange World of Quantum Physics",
+          link: "#"
+        }
+      ],
+      imageUrl: "/placeholder.svg",
+      price: 250,
+    },
+    {
+      id: "2",
+      name: "Dr. Janet Smith",
+      institution: {
+        name: "Harvard University",
+        link: "#"
+      },
+      suggestions: 5,
+      courses: [
+        {
+          name: "Introduction to Quantum Mechanics",
+          link: "#"
+        },
+        {
+          name: "Quantum Physics: Concepts and Applications",
+          link: "#"
+        },
+        {
+          name: "Quantum Mechanics: The Strange World of Quantum Physics",
+          link: "#"
+        }
+      ],
+      imageUrl: "/placeholder.svg",
+      price: 200,
+
+    },      
+    {
+      id: "3",
+      name: "Dr. Janet Smith",
+      institution: {
+        name: "Harvard University",
+        link: "#"
+      },
+      price: 100,
+      suggestions: 5,
+      courses: [
+        {
+          name: "Introduction to Quantum Mechanics",
+          link: "#"
+        },
+        {
+          name: "Quantum Physics: Concepts and Applications",
+          link: "#"
+        },
+        {
+          name: "Quantum Mechanics: The Strange World of Quantum Physics",
+          link: "#"
+        }
+      ],
+      imageUrl: "/placeholder.svg"
+    },
+    {
+      id: "4",
+      name: "Dr. Janet Smith",
+      institution: {
+        name: "Harvard University",
+        link: "#"
+      },
+      suggestions: 5,
+      courses: [
+        {
+          name: "Introduction to Quantum Mechanics",
+          link: "#"
+        },
+        {
+          name: "Quantum Physics: Concepts and Applications",
+          link: "#"
+        },
+        {
+          name: "Quantum Mechanics: The Strange World of Quantum Physics",
+          link: "#"
+        }
+      ],
+      imageUrl: "/placeholder.svg",
+      price: 150,
+    },
+    {
+      id: "5",
+      name: "Dr. Janet Smith",
+      institution: {
+        name: "Harvard University",
+        link: "#"
+      },
+      suggestions: 5,
+      courses: [
+        {
+          name: "Introduction to Quantum Mechanics",
+          link: "#"
+        },
+        {
+          name: "Quantum Physics: Concepts and Applications",
+          link: "#"
+        },
+        {
+          name: "Quantum Mechanics: The Strange World of Quantum Physics",
+          link: "#"
+        }
+      ],
+      imageUrl: "/placeholder.svg",
+      price: 300,
+    },
+    {
+      id: "1",
+      name: "Dr. Janet Smith",
+      institution: {
+        name: "Harvard University",
+        link: "#"
+      },
+      suggestions: 5,
+      courses: [
+        {
+          name: "Introduction to Quantum Mechanics",
+          link: "#"
+        },
+        {
+          name: "Quantum Physics: Concepts and Applications",
+          link: "#"
+        },
+        {
+          name: "Quantum Mechanics: The Strange World of Quantum Physics",
+          link: "#"
+        }
+      ],
+      imageUrl: "/placeholder.svg",
+      price: 250,
+    },
+    {
+      id: "2",
+      name: "Dr. Janet Smith",
+      institution: {
+        name: "Harvard University",
+        link: "#"
+      },
+      suggestions: 5,
+      courses: [
+        {
+          name: "Introduction to Quantum Mechanics",
+          link: "#"
+        },
+        {
+          name: "Quantum Physics: Concepts and Applications",
+          link: "#"
+        },
+        {
+          name: "Quantum Mechanics: The Strange World of Quantum Physics",
+          link: "#"
+        }
+      ],
+      imageUrl: "/placeholder.svg",
+      price: 200,
+
+    },      
+    {
+      id: "3",
+      name: "Dr. Janet Smith",
+      institution: {
+        name: "Harvard University",
+        link: "#"
+      },
+      price: 100,
+      suggestions: 5,
+      courses: [
+        {
+          name: "Introduction to Quantum Mechanics",
+          link: "#"
+        },
+        {
+          name: "Quantum Physics: Concepts and Applications",
+          link: "#"
+        },
+        {
+          name: "Quantum Mechanics: The Strange World of Quantum Physics",
+          link: "#"
+        }
+      ],
+      imageUrl: "/placeholder.svg"
+    },
+    {
+      id: "4",
+      name: "Dr. Janet Smith",
+      institution: {
+        name: "Harvard University",
+        link: "#"
+      },
+      suggestions: 5,
+      courses: [
+        {
+          name: "Introduction to Quantum Mechanics",
+          link: "#"
+        },
+        {
+          name: "Quantum Physics: Concepts and Applications",
+          link: "#"
+        },
+        {
+          name: "Quantum Mechanics: The Strange World of Quantum Physics",
+          link: "#"
+        }
+      ],
+      imageUrl: "/placeholder.svg",
+      price: 150,
+    },
+    {
+      id: "5",
+      name: "Dr. Janet Smith",
+      institution: {
+        name: "Harvard University",
+        link: "#"
+      },
+      suggestions: 5,
+      courses: [
+        {
+          name: "Introduction to Quantum Mechanics",
+          link: "#"
+        },
+        {
+          name: "Quantum Physics: Concepts and Applications",
+          link: "#"
+        },
+        {
+          name: "Quantum Mechanics: The Strange World of Quantum Physics",
+          link: "#"
+        }
+      ],
+      imageUrl: "/placeholder.svg",
+      price: 300,
+    },
+  ]
+}
+export default async function TeacherTable() {
+
+  const data = await getData();
+
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[250px]">Teacher</TableHead>
-          <TableHead>Institution</TableHead>
-          <TableHead>Course</TableHead>
-          <TableHead>Price</TableHead>
-          <TableHead>Appointment Load</TableHead>
-          <TableHead>Available Online Courses</TableHead>
-          <TableHead>Overall Rating</TableHead>
-          <TableHead className="text-right">Actions</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        <TableRow>
-          <TableCell>
-            <div className="flex items-center space-x-3">
-              <Image
-                alt="Avatar"
-                className="rounded-full"
-                height="32"
-                src="/placeholder.svg"
-                style={{
-                  aspectRatio: "32/32",
-                  objectFit: "cover",
-                }}
-                width="32"
-              />
-              <div className="space-y-1">
-                <h2 className="font-semibold">Dr. Janet Smith</h2>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Harvard University</p>
-              </div>
-            </div>
-          </TableCell>
-          <TableCell>Harvard University</TableCell>
-          <TableCell>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button className="p-0" variant="ghost">
-                  <InfoIcon className="w-4 h-4" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent>
-                <div />
-                <div className="grid gap-1.5">
-                  <h3 className="font-semibold">Courses</h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    Introduction to Quantum Mechanics
-                    <br />
-                    Quantum Physics: Concepts and Applications
-                    <br />
-                    Quantum Mechanics: The Strange World of Quantum Physics
-                  </p>
-                </div>
-              </PopoverContent>
-            </Popover>
-          </TableCell>
-          <TableCell>$50 - $100</TableCell>
-          <TableCell>Medium</TableCell>
-          <TableCell>
-            <Link className="underline" href="#">
-              5
-            </Link>
-          </TableCell>
-          <TableCell>⭐️⭐️⭐️⭐️</TableCell>
-          <TableCell className="text-right">
-            <Link className="underline" href="#">
-              Set an Appointment
-            </Link>
-          </TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>
-            <div className="flex items-center space-x-3">
-              <Image
-                alt="Avatar"
-                className="rounded-full"
-                height="32"
-                src="/placeholder.svg"
-                style={{
-                  aspectRatio: "32/32",
-                  objectFit: "cover",
-                }}
-                width="32"
-              />
-              <div className="space-y-1">
-                <h2 className="font-semibold">Dr. Janet Smith</h2>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Harvard University</p>
-              </div>
-            </div>
-          </TableCell>
-          <TableCell>Harvard University</TableCell>
-          <TableCell>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button className="p-0" variant="ghost">
-                  <InfoIcon className="w-4 h-4" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent>
-                <div />
-                <div className="grid gap-1.5">
-                  <h3 className="font-semibold">Courses</h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    Introduction to Quantum Mechanics
-                    <br />
-                    Quantum Physics: Concepts and Applications
-                    <br />
-                    Quantum Mechanics: The Strange World of Quantum Physics
-                  </p>
-                </div>
-              </PopoverContent>
-            </Popover>
-          </TableCell>
-          <TableCell>$50 - $100</TableCell>
-          <TableCell>Medium</TableCell>
-          <TableCell>
-            <Link className="underline" href="#">
-              5
-            </Link>
-          </TableCell>
-          <TableCell>⭐️⭐️⭐️⭐️</TableCell>
-          <TableCell className="text-right">
-            <Link className="underline" href="#">
-              Set an Appointment
-            </Link>
-          </TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>
-            <div className="flex items-center space-x-3">
-              <Image
-                alt="Avatar"
-                className="rounded-full"
-                height="32"
-                src="/placeholder.svg"
-                style={{
-                  aspectRatio: "32/32",
-                  objectFit: "cover",
-                }}
-                width="32"
-              />
-              <div className="space-y-1">
-                <h2 className="font-semibold">Dr. Janet Smith</h2>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Harvard University</p>
-              </div>
-            </div>
-          </TableCell>
-          <TableCell>Harvard University</TableCell>
-          <TableCell>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button className="p-0" variant="ghost">
-                  <InfoIcon className="w-4 h-4" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent>
-                <div />
-                <div className="grid gap-1.5">
-                  <h3 className="font-semibold">Courses</h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    Introduction to Quantum Mechanics
-                    <br />
-                    Quantum Physics: Concepts and Applications
-                    <br />
-                    Quantum Mechanics: The Strange World of Quantum Physics
-                  </p>
-                </div>
-              </PopoverContent>
-            </Popover>
-          </TableCell>
-          <TableCell>$50 - $100</TableCell>
-          <TableCell>Medium</TableCell>
-          <TableCell>
-            <Link className="underline" href="#">
-              5
-            </Link>
-          </TableCell>
-          <TableCell>⭐️⭐️⭐️⭐️</TableCell>
-          <TableCell className="text-right">
-            <Link className="underline" href="#">
-              Set an Appointment
-            </Link>
-          </TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
+    <div className="container mx-auto py-10">
+      <DataTable columns={columns} data={data} />
+    </div>
   )
 }
 
