@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { IconBadge } from "@/components/iconBadge";
+import { IconBadge } from "./IconBadge";
 import { ArrowBigRight, BookOpen } from "lucide-react";
 import { CourseProgress } from "./CourseProgress";
 

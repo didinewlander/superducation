@@ -1,0 +1,11 @@
+{
+  "version": "1.0",
+  "apis": [
+    {
+      "identifier": "grow-il",
+      "source": "@grow-il/v2.0#79zo2xlufk98uw",
+      "integrity": "sha512-nq1OQTdHhQ72oRUgMqttyXr+YdonBxhbbrWAGk6JDMHR46kVVbe420SgeRQesz/SPuWhKTXtP7U1vnws6vavGA==",
+      "installerVersion": "6.1.1"
+    }
+  ]
+}

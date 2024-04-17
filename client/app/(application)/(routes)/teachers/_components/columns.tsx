@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table"
 
 import { Button } from "@/components/ui/button"
-import { ArrowUpDown, MoreHorizontal } from "lucide-react"
+import { ArrowUpDown, ExternalLink, MoreHorizontal } from "lucide-react"
 
 import {
   DropdownMenu,
@@ -24,6 +24,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer"
 import TeacherInfo from "./TeacherInfo"
+import Link from "next/link"
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -52,12 +53,7 @@ export const columns: ColumnDef<Teacher>[] = [
         <DrawerTrigger>{row.original.name}</DrawerTrigger>
         <DrawerContent>
           <TeacherInfo teacherId={row.original.id} />
-          <DrawerFooter className="flex items-center">
-            <Button>Submit</Button>
-            <DrawerClose>
-              <Button variant="outline">Cancel</Button>
-            </DrawerClose>
-          </DrawerFooter>
+
         </DrawerContent>
       </Drawer>
     ),
@@ -104,12 +100,12 @@ export const columns: ColumnDef<Teacher>[] = [
     }
   },
   {
-    accessorKey: "appointmentLoad",
+    accessorKey: "appointment Load",
     header: "Appointment Load",
   },
   {
-    accessorKey: "availableOnlineCourses",
-    header: "Available Online Courses",
+    accessorKey: "Courses",
+    header: "Courses",
   },
   {
     accessorKey: "rating",
@@ -133,13 +129,14 @@ export const columns: ColumnDef<Teacher>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(teacher.id)}
+              onClick={() => navigator.clipboard.writeText(teacher.name)}
             >
-              Copy payment ID
+              Copy contact info
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem className="gap-2"> <Link href={`/teachers/appointments?id=${teacher.id}`} target="_blank">Take me there</Link>
+              <ExternalLink size={16}/></DropdownMenuItem>
+            <DropdownMenuItem>Add Review</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )

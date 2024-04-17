@@ -1,6 +1,6 @@
 import { db } from '@/lib/db'
-import { Loading } from '@/components/Loading'
-import { SearchInput } from '@/components/SearchInput'
+//import { Loading } from '@/components/Loading'
+//import { SearchInput } from '@/components/SearchInput'
 import React from 'react'
 import { Categories } from './_components/Categories'
 import { CoursesList } from '@/components/CoursesList'
@@ -25,9 +25,9 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
         <>
 
             <div className="px-6 pt-6 md:hidden md:mb-0 block">
-                <Loading >
+                {/* <Loading >
                     <SearchInput />
-                </Loading>
+                </Loading> */}
 
             </div>
             <div className="px-6">

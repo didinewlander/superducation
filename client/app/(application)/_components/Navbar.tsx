@@ -1,4 +1,4 @@
-import NavbarRoutes from "@/components/NavbarRoutes";
+import { SidebarRoutes } from "./NavbarRoutes"
 import MobileSidebar from "./MobileSidebar";
 
 export const Navbar = () => {
@@ -7,8 +7,8 @@ export const Navbar = () => {
       <MobileSidebar />
       <div className="flex text-center">
         <h1>{"Don't remember what's this for"}</h1>
-        </div>
-      <NavbarRoutes />
+      </div>
+      <SidebarRoutes />
     </div>
   );
 }

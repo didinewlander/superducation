@@ -67,30 +67,27 @@ export function DataTable<TData, TValue>({
     return (
         <div>
             <div className="flex items-center py-4 gap-2 ">
-                <div className="flex-1 text-sm text-muted-foreground">
-                    {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                    {table.getFilteredRowModel().rows.length} row(s) selected.
-                </div>
+
                 <Input
-                    placeholder="Filter names..."
+                    placeholder="Search names..."
                     value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
                     onChange={(event) =>
                         table.getColumn("name")?.setFilterValue(event.target.value)
                     }
                     className="max-w-sm"
                 />
-
+                <span className="italic text-sm pointer-events-none text-slate-500 select-none">Click teacher name for more info</span>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="outline" className="ml-auto">
-                            Columns
+                            Columns Visibility
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         {table
                             .getAllColumns()
                             .filter(
-                                (column) => column.getCanHide() && column.id !== "actions"
+                                (column) => column.getCanHide() && (column.id !== "actions" && column.id !== "name")
                             )
                             .map((column) => {
                                 return (

@@ -17,8 +17,8 @@ model User {
   createdAt        DateTime   @default(now())
   updatedAt        DateTime   @updatedAt
   institute        Institute?
-  receivedMessages Message[]  @relation("receiver")
   sentMessages     Message[]  @relation("sender")
+  receivedMessages Message[]  @relation("receiver")
   student          Student?
   teacher          Teacher?
   role             UserRole   @relation(fields: [roleId], references: [id])
@@ -40,9 +40,9 @@ model Student {
   payment                Unsupported("payment method")
   teacherId              String?
   appointments           Appointment[]
-  Teacher                Teacher?                      @relation(fields: [teacherId], references: [id])
-  institute              Institute                     @relation(fields: [instituteId], references: [id])
   user                   User                          @relation(fields: [userId], references: [id])
+  institute              Institute                     @relation(fields: [instituteId], references: [id])
+  Teacher                Teacher?                      @relation(fields: [teacherId], references: [id])
   suggestions            Suggestion[]
   progress               UserProgress[]
   coupons                Coupon[]                      @relation("CouponToStudent")
@@ -57,8 +57,8 @@ model Teacher {
   appointments Appointment[]
   Student      Student[]
   suggestions  Suggestion[]
-  institution  Institute     @relation(fields: [instituteId], references: [id], onDelete: Cascade)
   user         User          @relation(fields: [userId], references: [id])
+  institution  Institute     @relation(fields: [instituteId], references: [id], onDelete: Cascade)
   courses      Course[]      @relation("CourseToTeacher")
 }
 
@@ -96,11 +96,12 @@ model Course {
   updatedAt        DateTime     @updatedAt
   syllabusId       String
   instituteId      String
+  imageUrl         String?
   attachments      Attachment[]
   chapters         Chapter[]
-  institute        Institute    @relation(fields: [instituteId], references: [id])
-  syllabus         Syllabus     @relation(fields: [syllabusId], references: [id])
   category         Category     @relation(fields: [categoryId], references: [id])
+  syllabus         Syllabus     @relation(fields: [syllabusId], references: [id])
+  institute        Institute    @relation(fields: [instituteId], references: [id])
   purchases        Purchase[]
   suggestions      Suggestion[]
   studentsEnrolled Student[]    @relation("CourseToStudent")
@@ -144,9 +145,9 @@ model Suggestion {
   studentId         String
   teacherId         String
   courseId          String
-  suggestedCourse   Course   @relation(fields: [courseId], references: [id])
-  suggestedTeacher  Teacher  @relation(fields: [teacherId], references: [id])
   suggestingStudent Student  @relation(fields: [studentId], references: [id])
+  suggestedTeacher  Teacher  @relation(fields: [teacherId], references: [id])
+  suggestedCourse   Course   @relation(fields: [courseId], references: [id])
 }
 
 model Appointment {
@@ -157,8 +158,8 @@ model Appointment {
   endTime     DateTime
   studentId   String
   teacherId   String
-  teacher     Teacher  @relation(fields: [teacherId], references: [id])
   student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  teacher     Teacher  @relation(fields: [teacherId], references: [id])
 }
 
 model Message {
@@ -168,8 +169,8 @@ model Message {
   sendTime   DateTime @default(now())
   senderId   String
   receiverId String
-  receiver   User     @relation("receiver", fields: [receiverId], references: [id])
   sender     User     @relation("sender", fields: [senderId], references: [id])
+  receiver   User     @relation("receiver", fields: [receiverId], references: [id])
 }
 
 model Chapter {
@@ -206,8 +207,8 @@ model UserProgress {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   studentId   String?
-  Student     Student? @relation(fields: [studentId], references: [id])
   chapter     Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  Student     Student? @relation(fields: [studentId], references: [id])
 
   @@unique([userId, chapterId])
   @@index([chapterId])

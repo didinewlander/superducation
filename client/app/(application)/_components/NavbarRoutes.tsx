@@ -1,25 +1,25 @@
 "use client"
 
-import { BarChart, CandlestickChart, Compass, DoorOpen, ExternalLink, Github, Layers3, Layout, List, MonitorPlay, School, UserSearch } from "lucide-react";
+import { BarChart, BookCopy, CandlestickChart, Compass, DoorOpen, ExternalLink, Github, Layers3, Layout, List, MonitorPlay, School, UserSearch } from "lucide-react";
 import { SidebarItem } from "./SidebarItem";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 const guestRoutes = [
     {
-        icon: DoorOpen,
-        label: "Home ",
-        href: "/"
-    },
-    {
-        icon: School,
-        label: "Courses",
+        icon: BookCopy,
+        label: "Start Studying",
         href: "/search"
     },
     {
-        icon: UserSearch,
+        icon: Compass,
         label: "Find Teacher",
         href: "/teachers"
     },
+    {
+        icon: School,
+        label: "Browse Institutions",
+        href: "/institutions"
+    }
 ]
 
 const teacherRoutes = [
@@ -38,7 +38,7 @@ export const SidebarRoutes = () => {
     const pathname = usePathname();
 
     const isTeacherPage = pathname?.includes("/teacher");
-    const routes = isTeacherPage ? teacherRoutes : guestRoutes;
+    const routes = guestRoutes;
     return (
         <div className="flex flex-col w-full">
             {routes.map((route) => (
