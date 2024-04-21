@@ -134,7 +134,7 @@ export const columns: ColumnDef<Teacher>[] = [
               Copy contact info
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="gap-2"> <Link href={`/teachers/appointments?id=${teacher.id}`} target="_blank">Take me there</Link>
+            <DropdownMenuItem className="gap-2"> <Link href={`/teachers/${teacher.id}/appointments`} target="_blank">Take me there</Link>
               <ExternalLink size={16}/></DropdownMenuItem>
             <DropdownMenuItem>Add Review</DropdownMenuItem>
           </DropdownMenuContent>

@@ -89,7 +89,7 @@ async function getData(): Promise<Teacher[]> {
     },
     {
       id: "4",
-      name: "Dr. Janet Smith",
+      name: "Dr. Hadas Shor",
       institution: {
         name: "Harvard University",
         link: "#"

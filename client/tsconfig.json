@@ -21,6 +21,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/(application)/(routes)/teachers/appointments"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/(application)/(routes)/teachers/[teacherId]/appointments", "next.config.mjs"],
   "exclude": ["node_modules"]
 }

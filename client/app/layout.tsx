@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google"
 import "./globals.css";
 import { cn } from "@/lib/utils"
+import { Loading } from "@/components/Loading";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -10,7 +11,7 @@ const fontSans = FontSans({
 export const metadata: Metadata = {
   title: "Superducation - Start Learning",
   description: "Online studying and teaching platform",
-  icons:['../public/בשטח (2).png'], 
+  icons: ['../public/בשטח (2).png'],
 };
 
 export default function RootLayout({
@@ -27,7 +28,10 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        {children}
+        <Loading>
+          {children}
+        </Loading>
+
       </body>
     </html>
   )

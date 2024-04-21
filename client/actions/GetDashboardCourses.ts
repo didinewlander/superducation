@@ -11,8 +11,19 @@ type DashboardCourses = {
   coursesInProgress: CourseWithProgressAndCategory[]
 }
 
-export async function getDashboardCourses(userId: string): Promise<DashboardCourses> {
+export async function getDashboardCourses(email: string): Promise<DashboardCourses> {
   try {
+    const user = await db.user.findUnique({
+      where: { email },
+      select: { id: true },
+    })
+
+    const userId = user?.id
+
+    if (!userId) {
+      throw new Error('User not found')
+    }
+
     const purchasedCourses = await db.purchase.findMany({
       where: { userId },
       select: { course: { include: { category: true, chapters: { where: { isPublished: true } } } } },

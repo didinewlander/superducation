@@ -2,9 +2,10 @@ import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, Di
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
-
-export function OrderAppoint() {
-    const id = "teacherID";
+interface OrderAppointProps {
+    id: string;
+}
+export function OrderAppoint({ id }: OrderAppointProps) {
     return (
         <Dialog>
             <DialogTrigger asChild>
@@ -20,7 +21,7 @@ export function OrderAppoint() {
                 <DialogFooter className="flex gap-2 w-full justify-between">
                     <Button asChild variant={"success"}>
                         <div className="gap-2">
-                            <Link href={`/teachers/appointments?id=${id}`} target="_blank">Take me there</Link>
+                            <Link href={`/teachers/${id}/appointments`} target="_blank">Take me there</Link>
                             <ExternalLink />
                         </div>
                     </Button>

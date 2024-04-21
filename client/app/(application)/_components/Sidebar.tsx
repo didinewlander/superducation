@@ -1,4 +1,4 @@
-import { SidebarRoutes } from "./NavbarRoutes"
+import { SidebarRoutes } from "./SidebarRoutes"
 import { Logo } from "./Logo"
 
 const Sidebar = () => {

@@ -3,21 +3,19 @@ import { Avatar } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
 
-import { Teacher } from "@prisma/client"
 import { db } from "@/lib/db"
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { OrderAppoint } from "./OrderAppoint"
 import { ReportTeacher } from "./ReportTeacher"
-import { ScrollArea } from "@/components/ui/scroll-area"
+import { getTeacher } from "@/actions/GetTeacher"
 
-type teacherId = {
-    teacherId: string
+interface TeacherInfoProps {
+    teacherId: string;
 }
 
-export default function TeacherInfo({ teacherId }: teacherId) {
-    //const teacher = db.teacher.findFirst({ where: { id: teacherId } })
+export default async function TeacherInfo({ teacherId }: TeacherInfoProps) {
+    const teacher = await getTeacher({ teacherId });
     return (
-        
         <div className="w-full grid grid-cols-2 space-y-3">
             <div className="p-5">
                 <div className="grid items-center gap-4">
@@ -137,7 +135,7 @@ export default function TeacherInfo({ teacherId }: teacherId) {
 
                 </div>
                 <div className="grid grid-cols-2 gap-4 mt-4">
-                    <OrderAppoint />
+                    <OrderAppoint id={teacherId} />
                     <ReportTeacher />
                 </div>
             </div>

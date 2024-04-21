@@ -3,7 +3,7 @@ import Link from "next/link"
 
 export const Logo = () => {
     return (<>
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center select-none">
             <Link href="/">
                 <Image
                     height={100}

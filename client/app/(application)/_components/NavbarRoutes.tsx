@@ -1,67 +1,52 @@
-"use client"
+'use client'
 
-import { BarChart, BookCopy, CandlestickChart, Compass, DoorOpen, ExternalLink, Github, Layers3, Layout, List, MonitorPlay, School, UserSearch } from "lucide-react";
-import { SidebarItem } from "./SidebarItem";
-import { usePathname } from "next/navigation";
-import Link from "next/link";
-const guestRoutes = [
-    {
-        icon: BookCopy,
-        label: "Start Studying",
-        href: "/search"
-    },
-    {
-        icon: Compass,
-        label: "Find Teacher",
-        href: "/teachers"
-    },
-    {
-        icon: School,
-        label: "Browse Institutions",
-        href: "/institutions"
-    }
-]
+import { redirect, usePathname } from 'next/navigation'
+import { LogOut } from 'lucide-react'
+import Link from 'next/link'
 
-const teacherRoutes = [
-    {
-        icon: List,
-        label: "Courses",
-        href: "/teacher/courses"
-    },
-    {
-        icon: BarChart,
-        label: "Analytics",
-        href: "/teacher/analytics"
-    }
-]
-export const SidebarRoutes = () => {
-    const pathname = usePathname();
+import { Button } from '@/components/ui/button'
+import { SearchInput } from '@/components/searchInput'
+import { findRole } from '@/lib/roles'
+import { signOut, useSession } from 'next-auth/react'
+import { Avatar } from '@/components/ui/avatar'
+export const NavbarRoutes = () => {
+    const session = useSession();
+    if (!session) { redirect('/'); }
+    const role = findRole(session.data?.user?.email);
 
-    const isTeacherPage = pathname?.includes("/teacher");
-    const routes = guestRoutes;
+    const pathname = usePathname()
+
+    const isSearchPage = pathname?.includes('/search')
+
     return (
-        <div className="flex flex-col w-full">
-            {routes.map((route) => (
-                <SidebarItem
-                    key={route.href}
-                    icon={route.icon}
-                    label={route.label}
-                    href={route.href} />)
+        <>
+            {isSearchPage && (
+                <div className="hidden md:block">
+                    <SearchInput />
+                </div>
             )}
-            <div className="mt-20 bottom-0 justify-center items-center"><Link href="mailto:ydidya.n@gmail.com" target="_blank">
-                <div className="flex justify-center items-center p-4 m-2 border-2 rounded-full font-semibold">
-                    Report a bug / feature
-                </div></Link>
-                <p className="m-4 text-center text-sm italic font-light">And help this project improve</p>
-            </div>
-            <div className="mt-10 bottom-0 justify-center items-center">
-                <Link href="https://github.com/didinewlander/didi-teach/tree/dev" target="_blank">
-                    <div className="flex justify-center items-center p-4 m-2 text-sm border rounded-lg gap-3">
-                        <Github />
-                        Join me on GitHub
-                    </div>
+            
+            <div className="ml-auto flex gap-x-2">
+                <Avatar>
+                </Avatar>
+                {role === 'teacher' ? <Link href="/teachers/dashboard/courses">
+                    <Button size="sm" variant="ghost">
+                        Teacher mode
+                    </Button>
+                </Link>
+                    : <Link href="/institution/management">
+                        <Button size="sm" variant="ghost">
+                            Office mode
+                        </Button>
+                    </Link>
+                }
+                <Link href="/" onClick={() => signOut()}>
+                    <Button size="sm" variant="ghost">
+                        <LogOut className="mr-2 h-4 w-4" />
+                        Exit
+                    </Button>
                 </Link>
             </div>
-        </div>
-    );
+        </>
+    )
 }

@@ -1,10 +1,12 @@
 import * as sdk from "@api/grow-il";
 import { NextRequest, NextResponse } from "next/server";
+import { db } from "./db";
+import { auth } from "@/auth";
 
 /**
  * Interface representing a payment request for BitPay.
  */
-interface PaymentRequest {
+export interface BitPaymentRequest {
   /**
    * Unique identifier refers to payment method.
    */
@@ -137,7 +139,7 @@ interface PaymentRequest {
   }>;
 }
 
-interface PaymentResponse {
+export interface PaymentResponse {
   status: {
     type: "integer";
     description: "Status code indicating the result of the API call.";
@@ -171,18 +173,35 @@ interface PaymentResponse {
     };
   };
 }
-
-export async function POST(
-  request: NextRequest,
-  { params }: { params: PaymentRequest }
-) {
+/**
+ * Create Payment Process -
+ * @param request - must hold the paying user ID for updating payment token
+ * @param params - payment form info required for the process
+ * @returns returns a verification token to the user after processing the payment and updating the token in the user's account
+ */
+export async function pay({ params }: { params: BitPaymentRequest }) {
   try {
-    const userId = request.headers.get("userId");
-
-    if (!userId) {
-      return new NextResponse("User ID is missing.", { status: 400 });
+    // First - get user id, then check validity. after that process payment, then use token to update the user
+    const payingUserEmail = await auth();
+    if (!payingUserEmail?.user?.email) {
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
+    // Using `findFirst` because you are querying based on a non-unique field through a relation
+    const payingUser = await db.student.findFirst({
+      where: {
+        user: {
+          email: payingUserEmail.user.email, // Using the email from the session
+        },
+      },
+      include: {
+        user: true, // This includes all user fields; adjust if only specific fields are needed
+      },
+    });
+
+    if (!payingUser) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
     const options = new FormData();
 
     options.append("pageCode", params.pageCode);
@@ -249,7 +268,14 @@ export async function POST(
     ).then((res) => res.json());
 
     const userPaymentToken = response.data.processToken;
-  } catch (error) {}
+
+    return NextResponse.json(
+      { response: "success", token: userPaymentToken, receiptNum: response.data.processId },
+      { status: 200 }
+    );
+  } catch (error) {
+    return new NextResponse("Internal server error", { status: 500,  });
+  }
 }
 
 export const Bit = sdk.default;
