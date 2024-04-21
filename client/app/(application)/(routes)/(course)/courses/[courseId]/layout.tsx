@@ -4,7 +4,7 @@ import CourseNavbar from './_components/course-navbar'
 import CourseSidebar from './_components/course-sidebar'
 import { getProgress } from '@/actions/GetProgress'
 import { auth } from '@/auth'
-import { getUserIdByEmail } from '@/actions/GetUserByEmail'
+import { getUserIdByEmail } from '@/actions/GetUser'
 
 export default async function CourseLayout({
     children,

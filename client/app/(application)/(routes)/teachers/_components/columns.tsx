@@ -40,7 +40,6 @@ export type Teacher = {
     name: string,
     link: string
   }>
-  imageUrl: string
   price: number
 }
 

@@ -1,6 +1,6 @@
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { findRole } from "@/lib/roles";
-import { getUserIdByEmail } from "@/actions/GetUserByEmail";
+import { getUserIdByEmail } from "@/actions/GetUser";
 import { auth } from "@/auth";
 
 const f = createUploadthing();

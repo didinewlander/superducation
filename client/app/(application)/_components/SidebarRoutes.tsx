@@ -47,12 +47,12 @@ const institutionRoutes = [
     {
         icon: Layers3,
         label: "Management",
-        href: "/institution/management"
+        href: "/institutions/management"
     },
     {
         icon: MonitorPlay,
         label: "Courses",
-        href: "/institution/courses"
+        href: "/institutions/courses"
     },
     {
         icon: CandlestickChart,

@@ -1,15 +1,31 @@
 'use client'
 
 import { redirect, usePathname } from 'next/navigation'
-import { LogOut } from 'lucide-react'
+import { LogOut, User } from 'lucide-react'
 import Link from 'next/link'
 
 import { Button } from '@/components/ui/button'
 import { SearchInput } from '@/components/searchInput'
 import { findRole } from '@/lib/roles'
 import { signOut, useSession } from 'next-auth/react'
-import { Avatar } from '@/components/ui/avatar'
-export const NavbarRoutes = () => {
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuPortal,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+async function generateAcronym(input: string) {
+    if (!input) return '';
+    return input
+        .split(/\s+/)  // Split the input on any whitespace
+        .map(word => word[0].toUpperCase())  // Take the first character of each word and capitalize it
+        .join('');  // Join all the first letters to form the acronym
+}
+export const NavbarRoutes = async () => {
     const session = useSession();
     if (!session) { redirect('/'); }
     const role = findRole(session.data?.user?.email);
@@ -25,10 +41,25 @@ export const NavbarRoutes = () => {
                     <SearchInput />
                 </div>
             )}
-            
+
             <div className="ml-auto flex gap-x-2">
-                <Avatar>
-                </Avatar>
+                <DropdownMenu>
+                    <DropdownMenuTrigger>
+                        <Avatar className='shadow-md'>
+                            <AvatarImage src={session.data?.user?.image || ''} />
+                            <AvatarFallback>{await generateAcronym(session.data?.user?.name || '')}</AvatarFallback>
+                        </Avatar>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem><DropdownMenuPortal>hello</DropdownMenuPortal><Link href={'/dashboard'}>Profile Dashboard</Link></DropdownMenuItem>
+                        <DropdownMenuItem><Link href={'/dashboard/purchases'}>Bills & Purchases</Link></DropdownMenuItem>
+                        <DropdownMenuItem><Link href={'/dashboard/analytics'}>Analytics</Link></DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem><Link href={'/dashboard/connections'}>Appointments</Link></DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
                 {role === 'teacher' ? <Link href="/teachers/dashboard/courses">
                     <Button size="sm" variant="ghost">
                         Teacher mode

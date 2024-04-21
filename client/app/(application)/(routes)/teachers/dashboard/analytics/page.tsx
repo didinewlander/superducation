@@ -3,7 +3,7 @@ import DataCard from './_components/data-card'
 import Chart from './_components/chart'
 import { getAnalytics } from '@/actions/GetAnalytics'
 import { auth } from '@/auth'
-import { getUserIdByEmail } from '@/actions/GetUserByEmail'
+import { getUserIdByEmail } from '@/actions/GetUser'
 
 export default async function Analytics() {
   const session = await auth();

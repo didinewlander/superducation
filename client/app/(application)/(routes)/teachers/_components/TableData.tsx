@@ -44,8 +44,6 @@ export function DataTable<TData, TValue>({
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
         []
     )
-    const [rowSelection, setRowSelection] = useState({})
-
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
     const table = useReactTable({
         data,
@@ -67,7 +65,6 @@ export function DataTable<TData, TValue>({
     return (
         <div>
             <div className="flex items-center py-4 gap-2 ">
-
                 <Input
                     placeholder="Search names..."
                     value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
@@ -76,7 +73,7 @@ export function DataTable<TData, TValue>({
                     }
                     className="max-w-sm"
                 />
-                <span className="italic text-sm pointer-events-none text-slate-500 select-none">Click teacher name for more info</span>
+                <span className="italic text-sm pointer-events-none text-slate-500 select-none">Type teacher name for more info</span>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="outline" className="ml-auto">

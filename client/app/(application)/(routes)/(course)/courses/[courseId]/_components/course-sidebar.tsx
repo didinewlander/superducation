@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import { db } from '@/lib/db'
 import CourseSidebarItem from './course-sidebar-item'
 import { CourseProgress } from '@/components/CourseProgress'
-import { getUserIdByEmail } from '@/actions/GetUserByEmail'
+import { getUserIdByEmail } from '@/actions/GetUser'
 import { auth } from '@/auth'
 
 type CourseSidebarProps = {

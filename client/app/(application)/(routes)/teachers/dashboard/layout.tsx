@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import { findRole } from '@/lib/roles'
 import { auth } from '@/auth';
-import { getUserIdByEmail } from '@/actions/GetUserByEmail';
+import { getUserIdByEmail } from '@/actions/GetUser';
 
 export default async function TeacherLayout({ children }: { children: React.ReactNode }) {
   const session = await auth();

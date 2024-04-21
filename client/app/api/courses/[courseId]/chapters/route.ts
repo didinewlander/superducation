@@ -3,7 +3,7 @@ import { db } from "@/lib/db";
 import { findRole } from "@/lib/roles";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
-import { getUserIdByEmail } from "@/actions/GetUserByEmail";
+import { getUserIdByEmail } from "@/actions/GetUser";
 
 export async function POST(
   req: NextRequest,
