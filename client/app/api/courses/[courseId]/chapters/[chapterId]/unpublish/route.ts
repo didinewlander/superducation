@@ -1,14 +1,22 @@
-import { auth } from '@clerk/nextjs'
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
+import { findRole } from '@/lib/roles';
+import { getUserIdByEmail } from '@/actions/GetUser';
+import { auth } from '@/auth';
 
 type Params = { chapterId: string; courseId: string }
 
 export async function PATCH(req: NextRequest, { params }: { params: Params }) {
   try {
-    const { userId } = auth()
+    const session = await auth();
+
+    if (!session || findRole(session.user?.email) !== "teacher") {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+    const userId = await getUserIdByEmail(session.user?.email ?? "");
+
     if (!userId) {
-      return new NextResponse('Unauthorized', { status: 401 })
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
     const ownCourse = await db.course.findUnique({ where: { id: params.courseId, createdById: userId } })

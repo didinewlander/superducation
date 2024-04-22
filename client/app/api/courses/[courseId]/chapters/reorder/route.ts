@@ -1,13 +1,20 @@
-import { auth } from '@clerk/nextjs'
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
+import { auth } from '@/auth';
+import { findRole } from '@/lib/roles';
+import { getUserIdByEmail } from '@/actions/GetUser';
 
 export async function PUT(req: NextRequest, { params }: { params: { courseId: string } }) {
   try {
-    const { userId } = auth()
+    const session = await auth();
+
+    if (!session || findRole(session.user?.email) !== "teacher") {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+    const userId = await getUserIdByEmail(session.user?.email ?? "");
 
     if (!userId) {
-      return new NextResponse('Unauthorized', { status: 401 })
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
     const { list } = await req.json()

@@ -1,15 +1,23 @@
-import { auth } from '@clerk/nextjs'
 import { NextRequest, NextResponse } from 'next/server'
 import Mux from '@mux/mux-node'
 import { db } from '@/lib/db'
+import { auth } from '@/auth';
+import { getUserIdByEmail } from '@/actions/GetUser';
+import { findRole } from '@/lib/roles';
 
 type Params = { chapterId: string; courseId: string }
 
-const { Video } = new Mux(process.env.MUX_TOKEN_ID!, process.env.MUX_TOKEN_SECRET!)
+const { video } = new Mux({tokenId:process.env.MUX_TOKEN_ID!, tokenSecret: process.env.MUX_TOKEN_SECRET!})
 
 export async function PATCH(req: NextRequest, { params }: { params: Params }) {
   try {
-    const { userId } = await auth()
+    const session = await auth();
+
+    if (!session || findRole(session.user?.email) !== "teacher") {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+    const userId = await getUserIdByEmail(session.user?.email ?? "");
+
     // eslint-disable-next-line
     const { isPublished, ...values } = await req.json()
 
@@ -28,13 +36,13 @@ export async function PATCH(req: NextRequest, { params }: { params: Params }) {
       /** Cleaning up existing data */
       const existingMuxData = await db.muxData.findFirst({ where: { chapterId: params.chapterId } })
       if (existingMuxData) {
-        await Video.Assets.del(existingMuxData.assetId)
+        await video.assets.delete(existingMuxData.assetId)
         await db.muxData.delete({ where: { id: existingMuxData.id } })
       }
 
-      const asset = await Video.Assets.create({
+      const asset = await video.assets.create({
         input: values.videoUrl,
-        playback_policy: 'public',
+        playback_policy: ['public'],
         test: false,
       })
 
@@ -55,7 +63,13 @@ export async function PATCH(req: NextRequest, { params }: { params: Params }) {
 
 export async function DELETE(req: NextRequest, { params }: { params: Params }) {
   try {
-    const { userId } = await auth()
+    const session = await auth();
+
+    if (!session || findRole(session.user?.email) !== "teacher") {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+    const userId = await getUserIdByEmail(session.user?.email ?? "");
+
 
     if (!userId) {
       return new NextResponse('Unauthorized', { status: 401 })
@@ -77,7 +91,7 @@ export async function DELETE(req: NextRequest, { params }: { params: Params }) {
       const existingMuxData = await db.muxData.findFirst({ where: { chapterId: params.chapterId } })
 
       if (existingMuxData) {
-        await Video.Assets.del(existingMuxData.assetId)
+        await video.assets.delete(existingMuxData.assetId)
         await db.muxData.delete({ where: { id: existingMuxData.id } })
       }
     }

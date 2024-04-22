@@ -1,20 +1,28 @@
-import { auth } from '@clerk/nextjs'
-import { NextRequest, NextResponse } from 'next/server'
-import Mux from '@mux/mux-node'
-import { db } from '@/lib/db'
-import { isTeacher } from '@/lib/teacher'
+import { NextRequest, NextResponse } from "next/server";
+import Mux from "@mux/mux-node";
+import { db } from "@/lib/db";
+import { findRole } from "@/lib/roles";
+import { getUserIdByEmail } from "@/actions/GetUser";
+import { auth } from "@/auth";
 
-const { Video } = new Mux(process.env.MUX_TOKEN_ID!, process.env.MUX_TOKEN_SECRET!)
+const { video } = new Mux({
+  tokenId: process.env.MUX_TOKEN_ID!,
+  tokenSecret: process.env.MUX_TOKEN_SECRET!,
+});
 
-export async function PATCH(req: Request, { params }: { params: { courseId: string } }) {
+export async function PATCH(
+  req: Request,
+  { params }: { params: { courseId: string } }
+) {
   try {
-    const { userId } = auth()
-    const { courseId } = params
-    const values = await req.json()
+    const session = await auth();
+    const { courseId } = params;
+    const values = await req.json();
 
-    if (!userId || !isTeacher(userId)) {
-      return new NextResponse('Unauthorized', { status: 401 })
+    if (!session || findRole(session.user?.email) !== "teacher") {
+      return new NextResponse("Unauthorized", { status: 401 });
     }
+    const userId = await getUserIdByEmail(session.user?.email ?? "");
 
     const course = await db.course.update({
       where: {
@@ -26,47 +34,53 @@ export async function PATCH(req: Request, { params }: { params: { courseId: stri
         description: values?.description,
         imageUrl: values?.imageUrl,
         categoryId: values?.categoryId,
-        price: values?.price,
+        priceInCents: values?.price,
         attachments: values?.attachments,
       },
-    })
+    });
 
-    return NextResponse.json(course)
+    return NextResponse.json(course);
   } catch (error) {
-    return new NextResponse('Internal Error', { status: 500 })
+    return new NextResponse("Internal Error", { status: 500 });
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { courseId: string } }) {
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { courseId: string } }
+) {
   try {
-    const { userId } = auth()
+    const session = await auth();
 
-    if (!userId || !isTeacher(userId)) {
-      return new NextResponse('Unauthorized', { status: 401 })
+    if (!session || findRole(session.user?.email) !== "teacher") {
+      return new NextResponse("Unauthorized", { status: 401 });
     }
+    const userId = await getUserIdByEmail(session.user?.email ?? "");
 
     const course = await db.course.findUnique({
       where: { id: params.courseId, createdById: userId },
       include: {
         chapters: { include: { muxData: true } },
       },
-    })
+    });
 
     if (!course) {
-      return new NextResponse('Not found', { status: 404 })
+      return new NextResponse("Not found", { status: 404 });
     }
 
     /** Removing mux data for all chapters */
     for (const chapter of course.chapters) {
       if (chapter.muxData) {
-        await Video.Assets.del(chapter.muxData.assetId)
+        await video.assets.delete(chapter.muxData.assetId);
       }
     }
 
-    const deletedCourse = await db.course.delete({ where: { id: params.courseId } })
+    const deletedCourse = await db.course.delete({
+      where: { id: params.courseId },
+    });
 
-    return NextResponse.json(deletedCourse)
+    return NextResponse.json(deletedCourse);
   } catch {
-    return new NextResponse('Internal server exception', { status: 500 })
+    return new NextResponse("Internal server exception", { status: 500 });
   }
 }

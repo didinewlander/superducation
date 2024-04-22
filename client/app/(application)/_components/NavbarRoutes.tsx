@@ -53,11 +53,11 @@ export const NavbarRoutes = async () => {
                     <DropdownMenuContent>
                         <DropdownMenuLabel>My Account</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem><DropdownMenuPortal>hello</DropdownMenuPortal><Link href={'/dashboard'}>Profile Dashboard</Link></DropdownMenuItem>
-                        <DropdownMenuItem><Link href={'/dashboard/purchases'}>Bills & Purchases</Link></DropdownMenuItem>
-                        <DropdownMenuItem><Link href={'/dashboard/analytics'}>Analytics</Link></DropdownMenuItem>
+                        <DropdownMenuItem><Link href={'/dashboard?menu=profile'}>Profile Dashboard</Link></DropdownMenuItem>
+                        <DropdownMenuItem><Link href={'/dashboard?menu=bills'}>Bills & Purchases</Link></DropdownMenuItem>
+                        <DropdownMenuItem><Link href={'/dashboard?menu=analytics'}>Analytics</Link></DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem><Link href={'/dashboard/connections'}>Appointments</Link></DropdownMenuItem>
+                        <DropdownMenuItem><Link href={'/dashboard?menu=connections'}>Appointments</Link></DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
                 {role === 'teacher' ? <Link href="/teachers/dashboard/courses">
