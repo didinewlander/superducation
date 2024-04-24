@@ -11,9 +11,8 @@ model User {
   id               String     @id @default(uuid())
   email            String     @unique
   phone            String     @unique
-  password         String
   name             String
-  roleId           String
+  roleId           String?
   isVerified       Boolean    @default(false)
   createdAt        DateTime   @default(now())
   updatedAt        DateTime   @updatedAt
@@ -22,7 +21,7 @@ model User {
   receivedMessages Message[]  @relation("receiver")
   student          Student?
   teacher          Teacher?
-  role             UserRole   @relation(fields: [roleId], references: [id])
+  role             UserRole?  @relation(fields: [roleId], references: [id])
 }
 
 model UserRole {
@@ -87,7 +86,7 @@ model Syllabus {
 }
 
 model Course {
-  id               String       @id @default(uuid()) 
+  id               String       @id @default(uuid())
   title            String
   createdById      String
   description      String
@@ -101,9 +100,9 @@ model Course {
   imageUrl         String?
   attachments      Attachment[]
   chapters         Chapter[]
-  category         Category     @relation(fields: [categoryId], references: [id])
-  syllabus         Syllabus     @relation(fields: [syllabusId], references: [id])
   institute        Institute    @relation(fields: [instituteId], references: [id])
+  syllabus         Syllabus     @relation(fields: [syllabusId], references: [id])
+  category         Category     @relation(fields: [categoryId], references: [id])
   purchases        Purchase[]
   suggestions      Suggestion[]
   studentsEnrolled Student[]    @relation("CourseToStudent")

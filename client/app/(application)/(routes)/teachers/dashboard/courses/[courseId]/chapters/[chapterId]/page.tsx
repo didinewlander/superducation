@@ -2,7 +2,8 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Eye, LayoutDashboard, Video } from 'lucide-react'
 
-import { db } from '@/lib/db'
+import db from '@/lib/db'
+
 import { IconBadge } from '@/components/IconBadge'
 import { Banner } from '@/components/Banner'
 

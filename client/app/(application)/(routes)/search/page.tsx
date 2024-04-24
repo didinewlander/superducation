@@ -1,4 +1,5 @@
-import { db } from '@/lib/db'
+import db from '@/lib/db'
+
 //import { Loading } from '@/components/Loading'
 //import { SearchInput } from '@/components/SearchInput'
 import React from 'react'

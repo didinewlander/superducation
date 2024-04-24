@@ -1,4 +1,4 @@
-import { db } from "@/lib/db";
+import db from "@/lib/db";
 import { Teacher, User, Institute, Course, Appointment } from "@prisma/client";
 import { Teacher as TeacherType } from "@/app/(application)/(routes)/teachers/_components/columns";
 export type TeacherWithDetails = Teacher & {

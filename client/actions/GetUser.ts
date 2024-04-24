@@ -1,4 +1,5 @@
-import { db } from "@/lib/db";
+'use server'
+import db from "@/lib/db";
 
 export const getUserIdByEmail = async (email: string) => {
   const user = await db.user.findUnique({
@@ -16,4 +17,4 @@ export const getUser = async (email: string) => {
   });
 
   return user;
-}
+};
