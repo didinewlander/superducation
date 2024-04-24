@@ -12,6 +12,7 @@ model User {
   email            String     @unique
   phone            String     @unique
   name             String
+  gender           String
   roleId           String?
   isVerified       Boolean    @default(false)
   createdAt        DateTime   @default(now())
@@ -31,22 +32,23 @@ model UserRole {
 }
 
 model Student {
-  id                     String                        @id @default(uuid())
-  userId                 String                        @unique
-  instituteId            String
-  enrolledYear           Int
+  id                     String         @id @default(uuid())
+  userId                 String         @unique
+  instituteId            String?
+  enrolledYear           Int?
   expectedGraduationYear Int?
-  recommends             String
-  payment                Unsupported("payment method")
+  recommends             String?
+  paymentToken           String?
   teacherId              String?
   appointments           Appointment[]
-  user                   User                          @relation(fields: [userId], references: [id])
-  institute              Institute                     @relation(fields: [instituteId], references: [id])
-  Teacher                Teacher?                      @relation(fields: [teacherId], references: [id])
+  user                   User           @relation(fields: [userId], references: [id])
+  institute              Institute?      @relation(fields: [instituteId], references: [id])
+  Teacher                Teacher?       @relation(fields: [teacherId], references: [id])
   suggestions            Suggestion[]
   progress               UserProgress[]
-  coupons                Coupon[]                      @relation("CouponToStudent")
-  courses                Course[]                      @relation("CourseToStudent")
+  coupons                Coupon[]       @relation("CouponToStudent")
+  courses                Course[]       @relation("CourseToStudent")
+  purchases              Purchase[]
 }
 
 model Teacher {
@@ -100,9 +102,9 @@ model Course {
   imageUrl         String?
   attachments      Attachment[]
   chapters         Chapter[]
-  institute        Institute    @relation(fields: [instituteId], references: [id])
-  syllabus         Syllabus     @relation(fields: [syllabusId], references: [id])
   category         Category     @relation(fields: [categoryId], references: [id])
+  syllabus         Syllabus     @relation(fields: [syllabusId], references: [id])
+  institute        Institute    @relation(fields: [instituteId], references: [id])
   purchases        Purchase[]
   suggestions      Suggestion[]
   studentsEnrolled Student[]    @relation("CourseToStudent")
@@ -222,6 +224,8 @@ model Purchase {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  Student   Student? @relation(fields: [studentId], references: [id])
+  studentId String?
 
   @@unique([userId, courseId])
   @@index([courseId])
