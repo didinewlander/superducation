@@ -4,11 +4,13 @@ const { fontFamily } = require("tailwindcss/defaultTheme")
 const config = {
   darkMode: ["class"],
   content: [
-    "./pages/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
-    "./app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx}",
+    './pages/**/*.{ts,tsx}',
+    './components/**/*.{ts,tsx}',
+    './app/**/*.{ts,tsx}',
+    './src/**/*.{js,ts,jsx,tsx}', // Covers src from both configs
+    './node_modules/@tremor/**/*.{js,ts,jsx,tsx}', // Tremor components
   ],
+  
   prefix: "",
   theme: {
     container: {

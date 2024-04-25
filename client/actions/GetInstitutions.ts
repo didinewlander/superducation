@@ -31,9 +31,9 @@ export const getInstitute = async ({ userId, name }: GetInstitutes) => {
   }
 };
 
-export const getAllInstitutions = async () => {
+export const getAllInstitutions = async (): Promise<Institute[] | null> => {
   const session = await auth();
-  if (!session) return new NextResponse("Unauthorized", { status: 401 });
+  if (!session) null;
 
   try {
     const institutes = await db.institute.findMany({});

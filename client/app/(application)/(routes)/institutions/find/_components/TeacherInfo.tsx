@@ -1,45 +1,32 @@
-
 import { Avatar } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
-
-import { db } from "@/lib/db"
+import db from "@/lib/db"
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { OrderAppoint } from "./OrderAppoint"
 import { ReportTeacher } from "./ReportTeacher"
 import { getTeacher } from "@/actions/GetTeacher"
+import { useEffect, useState } from "react"
+import { Appointment, Course, Institute, User } from "@prisma/client"
+import { Teacher } from "./columns"
 
-interface TeacherInfoProps {
-    teacherId: string;
-}
 
-export default async function TeacherInfo({ teacherId }: TeacherInfoProps) {
-    const teacher = await getTeacher({ teacherId });
+type InstituteWithDetails = Institute & {
+    user: User | null;
+    teachers: Teacher[];
+    courses: Course[];
+    appointments: Appointment[];
+};
+const InstituteInfo = ({ institute }: { institute: Institute }) => {
+
     return (
         <div className="w-full grid grid-cols-2 space-y-3">
             <div className="p-5">
                 <div className="grid items-center gap-4">
                     <div className="flex items-center space-x-4">
-                        <Avatar className="w-12 h-12">
-                            <Image
-                                alt="Avatar"
-                                className="rounded-full"
-                                height="48"
-                                src="/placeholder.svg"
-                                style={{
-                                    aspectRatio: "48/48",
-                                    objectFit: "cover",
-                                }}
-                                width="48"
-                            />
-                        </Avatar>
                         <div className="space-y-1">
-                            <h1 className="text-2xl font-bold">Dr. Alice Johnson</h1>
+                            <h1 className="text-2xl font-bold">{institute.name || "No Name"}</h1>
                             <div className="flex items-center space-x-2 text-sm">
-                                <div className="w-4 h-4 flex-shrink-0 fill-current" />
-                                <div className="w-4 h-4 flex-shrink-0 fill-current" />
-                                <div className="w-4 h-4 flex-shrink-0 fill-current" />
-                                <div className="w-4 h-4 flex-shrink-0 fill-current" />
                                 <div className="w-4 h-4 flex-shrink-0 fill-current" />
                                 <span className="font-medium">5.0</span>
                                 <span className="text-sm text-gray-500 dark:text-gray-400">(245 reviews)</span>
@@ -48,20 +35,20 @@ export default async function TeacherInfo({ teacherId }: TeacherInfoProps) {
                     </div>
                     <div className="grid items-center gap-1 text-sm">
                         <span className="font-medium">Courses:</span>
-                        <span>Physics, Quantum Mechanics, Thermodynamics</span>
+                        <span>{institute.courses.map(course => course.title).join(", ") || "No Courses"}</span>
                     </div>
                 </div>
                 <div className="grid items-center gap-1 text-sm">
                     <span className="font-medium">Institution:</span>
-                    <span>Harvard University</span>
+                    <span>{teacher.institution?.name || "No Institution"}</span>
                 </div>
                 <div className="grid items-center gap-1 text-sm">
                     <span className="font-medium">Field of expertise:</span>
-                    <span>Physics</span>
+                    <span>{teacher.institution?.field || "No Field"}</span>
                 </div>
                 <div className="grid items-center gap-1 text-sm">
                     <span className="font-medium">Price range:</span>
-                    <span>$50.00 - $150.00</span>
+                    <span>{teacher.priceRange}</span>
                 </div>
                 <div className="grid items-center gap-1 text-sm">
                     <span className="font-medium">Appointment load:</span>
@@ -73,9 +60,9 @@ export default async function TeacherInfo({ teacherId }: TeacherInfoProps) {
                 </div>
 
             </div>
-            <div className="p-5">
+            <div className="p-2">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 overflow-y-scroll md:overflow-hidden">
-                    <div >
+                    <div>
                         <Card>
                             <CardHeader>
                                 <CardTitle>Number Of Courses</CardTitle>
@@ -87,15 +74,17 @@ export default async function TeacherInfo({ teacherId }: TeacherInfoProps) {
                         <Card>
                             <CardHeader>
                                 <CardTitle>Number Of Students</CardTitle>
-                                <CardDescription>10101</CardDescription>
+                                <CardDescription></CardDescription>
                             </CardHeader>
                         </Card>
                     </div>
                     <div className="md:col-span-1 hidden md:block">
                         <Card>
                             <CardHeader>
-                                <CardTitle>Joined</CardTitle>
-                                <CardDescription>At 2024</CardDescription>
+                                <CardTitle>Joined At</CardTitle>
+                                <CardDescription>
+                                    {`${(teacher.joinedDate.getUTCMonth() + 1).toString().padStart(2, '0')}/${teacher.joinedDate.getUTCFullYear()}`}
+                                </CardDescription>
                             </CardHeader>
                         </Card>
                     </div>
@@ -103,15 +92,17 @@ export default async function TeacherInfo({ teacherId }: TeacherInfoProps) {
                         <Card>
                             <CardHeader>
                                 <CardTitle>Latest Upload</CardTitle>
-                                <CardDescription>{Date.now().toLocaleString("en-IL")}</CardDescription>
+                                <CardDescription>
+                                    {`${teacher.latestUpload.getUTCDate().toString().padStart(2, '0')}/${(teacher.joinedDate.getUTCMonth() + 1).toString().padStart(2, '0')}/${teacher.joinedDate.getUTCFullYear()}`}
+                                </CardDescription>
                             </CardHeader>
                         </Card>
                     </div>
                     <div>
                         <Card>
                             <CardHeader>
-                                <CardTitle>Role</CardTitle>
-                                <CardDescription>Institution Name</CardDescription>
+                                <CardTitle>Works as: {teacher.role}</CardTitle>
+                                <CardDescription>{teacher.institution.name}</CardDescription>
                             </CardHeader>
                         </Card>
                     </div>
@@ -119,7 +110,7 @@ export default async function TeacherInfo({ teacherId }: TeacherInfoProps) {
                         <Card>
                             <CardHeader>
                                 <CardTitle>Availabilty</CardTitle>
-                                <CardDescription>Medium</CardDescription>
+                                <CardDescription>{teacher.appointmentLoad}%</CardDescription>
                             </CardHeader>
                         </Card>
                     </div>
@@ -127,20 +118,22 @@ export default async function TeacherInfo({ teacherId }: TeacherInfoProps) {
                         <Card >
                             <CardHeader>
                                 <CardTitle>Trending</CardTitle>
-                                <CardDescription>80%</CardDescription>
+                                <CardDescription>{teacher.appointmentLoad}</CardDescription>
                             </CardHeader>
                         </Card>
                     </div>
                     <div className="hidden md:block md:col-span-1"></div>
 
                 </div>
-                <div className="grid grid-cols-2 gap-4 mt-4">
-                    <OrderAppoint id={teacherId} />
-                    <ReportTeacher />
+                <div className="p-5">
+                    <div className="grid grid-cols-2 gap-4 mt-4">
+                        <OrderAppoint id={teacher.id} />
+                        <ReportTeacher />
+                    </div>
                 </div>
             </div>
         </div>
-
-    )
+    );
 }
 
+export default InstituteInfo;

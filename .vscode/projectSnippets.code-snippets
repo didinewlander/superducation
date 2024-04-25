@@ -19,6 +19,7 @@
 	"Check user session": {
 		"scope": "javascript, typescript, javascriptreact, typescriptreact",
 		"prefix": "userAuth",
+		
 		"body": [
 			"const session = await auth();",
 			"if (!session) redirect('/');",

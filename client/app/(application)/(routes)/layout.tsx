@@ -4,6 +4,7 @@ import Sidebar from "../_components/Sidebar";
 import { auth } from "@/auth";
 import { SignIn } from "@/components/auth/signin-button";
 import LoginPage from "@/components/auth/login-page";
+import NextTopLoader from 'nextjs-toploader';
 
 const DashboardLayout = async (
     {
@@ -23,8 +24,9 @@ const DashboardLayout = async (
                 </div>
                 <div className="hidden md:flex h-full w-56 flex-col fixed inset-y-0 z-50">
                     <Sidebar />
-                </div>
+                </div> 
                 <main className="md:pl-56 pt-[90px] h-full">
+                <NextTopLoader showSpinner={false} easing="ease"/>
                     {children}
                 </main>
             </SessionProvider>

@@ -6,6 +6,9 @@ import { redirect, usePathname } from "next/navigation";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { findRole } from "@/lib/roles";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+
 const guestRoutes = [
     {
         icon: BookCopy,
@@ -15,12 +18,12 @@ const guestRoutes = [
     {
         icon: Compass,
         label: "Find Teacher",
-        href: "/teachers"
+        href: "/teachers/find"
     },
     {
         icon: School,
         label: "Browse Institutions",
-        href: "/institutions"
+        href: "/institutions/find"
     }
 ]
 
@@ -28,19 +31,57 @@ const teacherRoutes = [
     {
         icon: List,
         label: "Courses",
-        href: "/teachers/dashboard/courses"
+        href: "/teachers/courses"
     },
     {
         icon: CalendarCheck,
         label: "Appointments",
-        href: "/teachers/[teacherId]/appointments"
+        href: "/appointments/"
     }
     ,
     {
         icon: BarChart,
         label: "Analytics",
-        href: "/teachers/dashboard/analytics"
+        href: "/teachers/analytics"
     },
+]
+
+const studentAndTeacherRoutes = [
+    {
+        icon: BookCopy,
+        label: "Start Studying",
+        href: "/search"
+    },
+    {
+        icon: Compass,
+        label: "Find Teacher",
+        href: "/teachers/find"
+    },
+
+    {
+        icon: School,
+        label: "Browse Institutions",
+        href: "/institutions/find"
+    },
+    {
+        icon: List,
+        label: "My Courses",
+        href: "/teachers/courses"
+    },
+    {
+        icon: CalendarCheck,
+        label: "Appointments",
+        href: "/appointments/"
+    }
+    ,
+    {
+        icon: BarChart,
+        label: "Analytics",
+        href: "/teachers/analytics"
+    },
+
+
+
 ]
 
 const institutionRoutes = [
@@ -66,11 +107,14 @@ export const SidebarRoutes = () => {
     if (!session) { redirect('/'); }
     const role = findRole(session.data?.user?.email);
 
-    const pathname = usePathname();
-
-    const isTeacherPage = pathname?.includes("/teachers/dashboard");
-    const isInstructorPage = pathname?.includes("/institutions");
-    const routes = isTeacherPage ? teacherRoutes : guestRoutes
+    const isStudentPage = (role === "student");
+    const isTeacherPage = (role === "teacher");
+    const isTeacherAndStudentPage = (role === "both");
+    const isInstructorPage = (role === "institution");
+    const routes = isTeacherPage ? teacherRoutes
+        : isStudentPage ? guestRoutes
+            : isInstructorPage ? institutionRoutes
+                : isTeacherAndStudentPage ? studentAndTeacherRoutes : [];
     return (
         <div className="flex flex-col w-full">
             {routes.map((route) => (
@@ -80,20 +124,15 @@ export const SidebarRoutes = () => {
                     label={route.label}
                     href={route.href} />)
             )}
-            <div className="mt-20 bottom-0 justify-center items-center"><Link href="mailto:ydidya.n@gmail.com" target="_blank">
-                <div className="flex justify-center items-center p-4 m-2 border-2 rounded-full font-semibold">
-                    Report a bug / feature
-                </div></Link>
-                <p className="m-4 text-center text-sm italic font-light">And help this project improve</p>
-            </div>
-            <div className="mt-10 bottom-0 justify-center items-center">
-                <Link href="https://github.com/didinewlander/didi-teach/tree/dev" target="_blank">
-                    <div className="flex justify-center items-center p-4 m-2 text-sm border rounded-lg gap-3">
-                        <Github />
-                        Join me on GitHub
-                    </div>
+            <div className="flex justify-center mt-20 bottom-0">
+                <Link href="mailto:ydidya.n@gmail.com" target="_blank">
+                    <Button className="flex">
+                        Report a bug / feature
+                    </Button>
                 </Link>
             </div>
+            <p className="m-4 text-center text-sm italic font-light">And help this project improve</p>
+
         </div>
     );
 }

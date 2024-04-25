@@ -59,6 +59,7 @@ const NameForm = ({ initialData }: NameFormProps) => {
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
 
         try {
+            console.log(values);
             const response = await axios.post(`/api/users/`, values)
             toast.success('User Created');
             toggleEdit();

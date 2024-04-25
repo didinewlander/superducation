@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table"
 
 import { Button } from "@/components/ui/button"
-import { ArrowUpDown, ExternalLink, MoreHorizontal } from "lucide-react"
+import { ArrowUpDown, ExternalLink, MoreHorizontal, User } from "lucide-react"
 
 import {
   DropdownMenu,
@@ -30,17 +30,27 @@ import Link from "next/link"
 // You can use a Zod schema here if you want.
 export type Teacher = {
   id: string
+  gender: string
   name: string
   institution: {
     name: string
-    link: string
+    website: string
   }
-  suggestions: number
+  joinedDate: Date
+  role: string
+  suggestions: {
+    courseId: string
+    description: string
+    title: string
+  }[]
+  rating: number
   courses: Array<{
-    name: string,
+    title: string,
     link: string
   }>
-  price: number
+  priceRange: string
+  appointmentLoad: number
+  latestUpload: Date
 }
 
 export const columns: ColumnDef<Teacher>[] = [
@@ -49,9 +59,9 @@ export const columns: ColumnDef<Teacher>[] = [
     header: "Name",
     cell: ({ row }) => (
       <Drawer>
-        <DrawerTrigger>{row.original.name}</DrawerTrigger>
+        <DrawerTrigger className="flex gap-2"><User color={row.original.gender == "1" ? "#40b5e7" : row.original.gender == "2" ? "#dc40e7" : "black"} />{row.original.name}</DrawerTrigger>
         <DrawerContent>
-          <TeacherInfo teacherId={row.original.id} />
+          <TeacherInfo teacher={row.original} />
 
         </DrawerContent>
       </Drawer>
@@ -70,6 +80,14 @@ export const columns: ColumnDef<Teacher>[] = [
         </Button>
       )
     },
+    cell: ({ row }) => {
+      const institution = row.getValue("institution") as Teacher['institution'];
+      return (
+        <Link href={institution.website ?? ""} target="_blank">
+          {institution.name ?? ""}
+        </Link>
+      )
+    }
   },
   {
     accessorKey: "courses",
@@ -102,10 +120,7 @@ export const columns: ColumnDef<Teacher>[] = [
     accessorKey: "appointment Load",
     header: "Appointment Load",
   },
-  {
-    accessorKey: "Courses",
-    header: "Courses",
-  },
+  
   {
     accessorKey: "rating",
     header: "Avg. Rating",
@@ -133,8 +148,8 @@ export const columns: ColumnDef<Teacher>[] = [
               Copy contact info
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="gap-2"> <Link href={`/teachers/${teacher.id}/appointments`} target="_blank">Take me there</Link>
-              <ExternalLink size={16}/></DropdownMenuItem>
+            <DropdownMenuItem className="gap-2"> <Link href={`/appointments/${teacher.id}`} target="_blank">Take me there</Link>
+              <ExternalLink size={16} /></DropdownMenuItem>
             <DropdownMenuItem>Add Review</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

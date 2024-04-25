@@ -18,6 +18,8 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { getUserIdByEmail } from '@/actions/GetUser'
+import { useEffect, useState } from 'react'
 async function generateAcronym(input: string) {
     if (!input) return '';
     return input
@@ -25,14 +27,34 @@ async function generateAcronym(input: string) {
         .map(word => word[0].toUpperCase())  // Take the first character of each word and capitalize it
         .join('');  // Join all the first letters to form the acronym
 }
-export const NavbarRoutes = async () => {
+export const NavbarRoutes = () => {
     const session = useSession();
     if (!session) { redirect('/'); }
+
+    const [userId, setUserId] = useState("");
+
+    const str = (session.data?.user?.name || "")
+        .split(/\s+/)
+        .map(word => word[0])
+        .join('')
+
     const role = findRole(session.data?.user?.email);
 
     const pathname = usePathname()
 
     const isSearchPage = pathname?.includes('/search')
+
+    useEffect(() => {
+        async function checkUser() {
+            const email = session?.data?.user?.email || "";
+
+            const userId = await getUserIdByEmail(email);
+            if (!userId) { return null }
+            setUserId(userId);
+        }
+
+        checkUser();
+    }, [session]);
 
     return (
         <>
@@ -47,7 +69,9 @@ export const NavbarRoutes = async () => {
                     <DropdownMenuTrigger>
                         <Avatar className='shadow-md'>
                             <AvatarImage src={session.data?.user?.image || ''} />
-                            <AvatarFallback>{await generateAcronym(session.data?.user?.name || '')}</AvatarFallback>
+                            <AvatarFallback>
+                                {str}
+                            </AvatarFallback>
                         </Avatar>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
@@ -55,19 +79,27 @@ export const NavbarRoutes = async () => {
                         <DropdownMenuSeparator />
                         <DropdownMenuItem><Link href={'/dashboard'}>Profile Dashboard</Link></DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem><Link href={'/appointments'}>Appointments</Link></DropdownMenuItem>
+                        <DropdownMenuItem><Link href={`/appointments/${userId}`}>Appointments</Link></DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
-                {role === 'teacher' ? <Link href="/teachers/dashboard/courses">
-                    <Button size="sm" variant="ghost">
-                        Teacher mode
-                    </Button>
-                </Link>
-                    : <Link href="/institution/management">
+                {role === 'teacher' ?
+                    (<Link href="/teachers/courses">
                         <Button size="sm" variant="ghost">
-                            Office mode
+                            Teacher mode
                         </Button>
-                    </Link>
+                    </Link>) :
+                    role === 'institution' ?
+                        (<Link href="/institution/management">
+                            <Button size="sm" variant="ghost">
+                                Office mode
+                            </Button>
+                        </Link>)
+                        :
+                        role === 'both' ? (<Link href="/teachers/courses">
+                            <Button size="sm" variant="ghost">
+                                Teacher mode
+                            </Button>
+                        </Link>) : null
                 }
                 <Link href="/" onClick={() => signOut()}>
                     <Button size="sm" variant="ghost">

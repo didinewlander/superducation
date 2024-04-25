@@ -19,12 +19,12 @@ export function OrderAppoint({ id }: OrderAppointProps) {
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter className="flex gap-2 w-full justify-between">
-                    <Button asChild variant={"success"}>
+                    <Link href={`/appointments/${id}`} target="_blank"><Button asChild variant={"success"} >
                         <div className="gap-2">
-                            <Link href={`/teachers/${id}/appointments`} target="_blank">Take me there</Link>
+                            Take me there
                             <ExternalLink />
                         </div>
-                    </Button>
+                    </Button></Link>
                     <DialogClose asChild>
                         <Button type="button" variant="ghost">
                             Close

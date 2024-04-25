@@ -10,6 +10,7 @@ export async function POST(
   try {
     const { firstName, lastName, phone, gender, role } = await req.json();
     const session = await auth();
+    const testInstitute = "9a5de7cb-0b4d-4bdd-b400-12f8434d4c0e";
     if (!session) return new NextResponse("Unauthorized", { status: 401 });
 
     const roleRecord = await db.userRole.findUnique({
@@ -19,7 +20,7 @@ export async function POST(
     if (!roleRecord) {
       return new NextResponse("Invalid role specified", { status: 400 });
     }
-    
+
     const fullName = (await firstName) + " " + lastName;
     const user = await db.user.create({
       data: {
@@ -43,7 +44,7 @@ export async function POST(
         await db.teacher.create({
           data: {
             userId: user.id,
-            instituteId: "",
+            instituteId: testInstitute,
           },
         });
         break;
@@ -54,6 +55,19 @@ export async function POST(
             name: fullName,
             phoneNumber: phone,
             website: "",
+          },
+        });
+        break;
+      case "both":
+        await db.student.create({
+          data: {
+            userId: user.id,
+          },
+        });
+        await db.teacher.create({
+          data: {
+            userId: user.id,
+            instituteId: testInstitute,
           },
         });
         break;
@@ -74,6 +88,7 @@ export async function POST(
       }
     } else {
       console.log(e);
+      return NextResponse.json(e);
     }
     console.log(e);
   }
