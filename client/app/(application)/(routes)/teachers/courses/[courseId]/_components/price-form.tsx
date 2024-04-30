@@ -34,7 +34,7 @@ export const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      price: initialData?.price || undefined,
+      price: initialData?.priceInCents || undefined,
     },
   })
 
@@ -67,8 +67,8 @@ export const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
         </Button>
       </div>
       {!isEditing && (
-        <p className={cn('mt-2 text-sm', !initialData.price && 'italic text-slate-500')}>
-          {initialData.price ? formatPrice(initialData.price) : 'No price'}
+        <p className={cn('mt-2 text-sm', !initialData.priceInCents && 'italic text-slate-500')}>
+          {initialData.priceInCents ? formatPrice(initialData.priceInCents) : 'No price'}
         </p>
       )}
       {isEditing && (
