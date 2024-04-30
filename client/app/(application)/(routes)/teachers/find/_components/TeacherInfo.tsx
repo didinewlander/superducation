@@ -42,10 +42,7 @@ const TeacherInfo = ({ teacher }: { teacher: Teacher }) => {
                     <span className="font-medium">Institution:</span>
                     <span>{teacher.institution?.name || "No Institution"}</span>
                 </div>
-                <div className="grid items-center gap-1 text-sm">
-                    <span className="font-medium">Field of expertise:</span>
-                    <span>{teacher.institution?.field || "No Field"}</span>
-                </div>
+               
                 <div className="grid items-center gap-1 text-sm">
                     <span className="font-medium">Price range:</span>
                     <span>{teacher.priceRange}</span>
