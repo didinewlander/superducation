@@ -43,7 +43,9 @@ export const ProfileForm = ({ initialData, userId }: ProfileFormProps) => {
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        defaultValues: initialData.user,
+        defaultValues: {
+            id: userId,
+        },
     })
     const { isSubmitting, isValid } = form.formState
 
