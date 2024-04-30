@@ -41,7 +41,7 @@ export default function Actions({ disabled, isPublished, courseId }: ActionsProp
         await axios.patch(`/api/courses/${courseId}/unpublish`)
         toast.success('Course unpublished!')
       } else {
-        await axios.patch(`/api/courses/${courseId}/publish`)
+        const response = await axios.patch(`/api/courses/${courseId}/publish`)
         toast.success('Course published!')
         confetti.onOpen()
       }

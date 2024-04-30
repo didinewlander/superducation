@@ -37,15 +37,21 @@ export default async function CourseLayout({
 
     return (
         <div className="h-full">
-            <div className="fixed inset-y-0 z-50 h-20 w-full md:pl-80">
-                <CourseNavbar course={course} progressCount={progressCount} />
+            <div className="h-[80px] md:pl-80 fixed inset-y-0 w-full z-50">
+                <CourseNavbar
+                    course={course}
+                    progressCount={progressCount}
+                />
             </div>
-
-            <div className="fixed inset-y-0 z-50 hidden h-full w-80 flex-col md:flex">
-                <CourseSidebar course={course} progressCount={progressCount} />
+            <div className="hidden md:flex h-full w-80 flex-col fixed inset-y-0 z-50">
+                <CourseSidebar
+                    course={course}
+                    progressCount={progressCount}
+                />
             </div>
-
-            <main className="h-full pt-20 md:pl-80">{children}</main>
+            <main className="md:pl-80 pt-[80px] h-full">
+                {children}
+            </main>
         </div>
     )
 }
