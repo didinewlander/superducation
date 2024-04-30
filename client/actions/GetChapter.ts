@@ -1,5 +1,6 @@
 import { Attachment, Chapter } from '@prisma/client'
-import db from '@/lib/db'
+import { db } from '@/lib/db'
+
 
 
 type GetChapterArgs = {

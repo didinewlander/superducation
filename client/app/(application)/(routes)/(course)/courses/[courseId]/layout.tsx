@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
-import db from '@/lib/db'
+import { db } from '@/lib/db'
+
 
 import CourseNavbar from './_components/course-navbar'
 import CourseSidebar from './_components/course-sidebar'

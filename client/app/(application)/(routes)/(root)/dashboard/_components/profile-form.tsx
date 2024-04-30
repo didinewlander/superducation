@@ -3,7 +3,8 @@ import { getUser } from '@/actions/GetUser'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import db from '@/lib/db'
+import { db } from '@/lib/db'
+
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { User, Student, Teacher, Institute } from '@prisma/client'

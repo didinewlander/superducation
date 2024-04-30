@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
-import db from '@/lib/db'
+import { db } from '@/lib/db'
+
 
 import { DataTable } from './_component/data-table'
 import { columns } from './_component/columns'
