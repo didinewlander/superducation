@@ -1,5 +1,5 @@
 import { CourseWithProgressWithCategory } from "@/actions/GetCourses";
-import { CourseCard } from "@/components/CourseCard";
+import { CourseCard } from "@/components/course-card";
 
 interface CoursesListProps {
     items: CourseWithProgressWithCategory[];

@@ -1,7 +1,7 @@
 import React from 'react'
 import { InfoCard } from './_components/InfoCard'
 import { CheckCircle, Clock } from 'lucide-react'
-import { CoursesList } from '@/components/CoursesList'
+import { CoursesList } from '@/components/courses-list'
 import { getDashboardCourses } from '@/actions/GetDashboardCourses'
 import { redirect } from 'next/navigation'
 import { auth } from '@/auth'

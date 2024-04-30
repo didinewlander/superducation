@@ -5,7 +5,7 @@ import { LogOut, User } from 'lucide-react'
 import Link from 'next/link'
 
 import { Button } from '@/components/ui/button'
-import { SearchInput } from '@/components/searchInput'
+import { SearchInput } from '@/components/search-input'
 import { findRole } from '@/lib/roles'
 import { signOut, useSession } from 'next-auth/react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'

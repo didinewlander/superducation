@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import { IconBadge } from "./IconBadge";
 import { ArrowBigRight, BookOpen } from "lucide-react";
-import { CourseProgress } from "./CourseProgress";
+import { CourseProgress } from "./course-progress";
+import { IconBadge } from "./icon-badge";
 
 interface CourseCardProps {
     id: string;

@@ -41,7 +41,7 @@ function WelcomePage() {
         <p>Loading...</p>
       ) : (
         <div className='items-center'>
-          <h1>Welcome to Superducation</h1>
+          <h1>Welcome To Superducation</h1>
           <p>
             {"We've noticed you haven't created a profile yet. Please fill out the form below to get started."}
           </p>

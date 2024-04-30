@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation'
 import { Attachment, Course } from '@prisma/client'
 
 import { Button } from '@/components/ui/button'
-import { FileUpload } from '@/components/fileUpload'
+import { FileUpload } from '@/components/file-upload'
 
 interface AttachmentFormProps {
   initialData: Course & { attachments: Attachment[] }
