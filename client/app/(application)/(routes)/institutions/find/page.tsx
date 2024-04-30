@@ -1,15 +1,15 @@
 
 import NextTopLoader from "nextjs-toploader";
-import { Institute, columns } from "./_components/columns"
+import { Institute, InstituteMinimumDetail, columns } from "./_components/columns"
 import { DataTable } from "./_components/TableData"
 import { getAllTeachers } from "@/actions/GetTeacher"
 import { auth } from "@/auth";
 import { getUserIdByEmail } from "@/actions/GetUser";
 import { redirect } from "next/navigation";
-import { getAllInstitutions } from "@/actions/GetInstitutions";
+import { getTableInstitutions } from "@/actions/GetInstitutions";
 
-async function getData(): Promise<Institute[]> {
-  const institutions = await getAllInstitutions();
+async function getData(): Promise<InstituteMinimumDetail[]> {
+  const institutions = await getTableInstitutions();
   if (!institutions) return [];
   return institutions;
 }
@@ -23,7 +23,7 @@ export default async function InstitutionTable() {
     <div className="container mx-auto py-10">
       <NextTopLoader showSpinner={false} easing="ease" />
 
-      <DataTable columns={columns} data={data} />
+      <DataTable columns={columns} data={data}/>
     </div>
   )
 }

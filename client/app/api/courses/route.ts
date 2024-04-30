@@ -5,6 +5,34 @@ import { findRole } from "@/lib/roles";
 import { getUserIdByEmail } from "@/actions/GetUser";
 import { auth } from "@/auth";
 
+export async function POST(request: NextRequest) {
+  try {
+    const session = await auth();
+    const { title } = await request.json();
+
+    if (!session?.user?.email) {
+      return new NextResponse("no email", { status: 401 });
+    }
+    const userId = await getUserIdByEmail(session.user?.email ?? "");
+    if (!userId) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    const course = await db.course.create({
+      data: {
+        title,
+        createdById: userId,
+        description: "",
+      },
+    });
+
+    return NextResponse.json(course);
+  } catch (error) {
+    console.log("[CREATE_COURSE]", error);
+    return new NextResponse("Internal Server Error", { status: 500 });
+  }
+}
+
 const { video } = new Mux({
   tokenId: process.env.MUX_TOKEN_ID!,
   tokenSecret: process.env.MUX_TOKEN_SECRET!,
@@ -19,13 +47,10 @@ export async function PATCH(
     const { courseId } = params;
     const values = await req.json();
 
-    if (!session?.user?.email) {
-      return new NextResponse("no email", { status: 401 });
-    }
-    const userId = await getUserIdByEmail(session.user?.email ?? "");
-    if (!userId) {
+    if (!session || findRole(session.user?.email) !== "teacher") {
       return new NextResponse("Unauthorized", { status: 401 });
     }
+    const userId = await getUserIdByEmail(session.user?.email ?? "");
 
     const course = await db.course.update({
       where: {
@@ -55,13 +80,10 @@ export async function DELETE(
   try {
     const session = await auth();
 
-    if (!session?.user?.email) {
-      return new NextResponse("no email", { status: 401 });
-    }
-    const userId = await getUserIdByEmail(session.user?.email ?? "");
-    if (!userId) {
+    if (!session || findRole(session.user?.email) !== "teacher") {
       return new NextResponse("Unauthorized", { status: 401 });
     }
+    const userId = await getUserIdByEmail(session.user?.email ?? "");
 
     const course = await db.course.findUnique({
       where: { id: params.courseId, createdById: userId },

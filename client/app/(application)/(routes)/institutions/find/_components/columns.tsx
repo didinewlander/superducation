@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table"
 
 import { Button } from "@/components/ui/button"
-import { ArrowUpDown, ExternalLink, MoreHorizontal, User } from "lucide-react"
+import { ArrowUpDown, ExternalLink, Globe, MoreHorizontal, Phone, User } from "lucide-react"
 
 import {
   DropdownMenu,
@@ -30,99 +30,117 @@ import Link from "next/link"
 // You can use a Zod schema here if you want.
 export type Institute = {
   id: string
-  gender: string
   name: string
-  institution: {
+  website: string
+  phoneNumber: string
+  income: number
+  students: {
     name: string
-    website: string
+    studentId: string
+    email: string
+    phoneNumber: string
+    overallRating: number
+    appointmentLoad: number
+    numberOfCourses: number
   }
-  joinedDate: Date
-  role: string
-  suggestions: {
-    courseId: string
-    description: string
+  courses: {
     title: string
-  }[]
-  rating: number
-  courses: Array<{
-    title: string,
     link: string
-  }>
-  priceRange: string
-  appointmentLoad: number
-  latestUpload: Date
+    /**
+    *
+    * Fetch the data where progress is less than 100 from all students enrolled in this course
+    * @tutorial fetch courses-> students for each student -> fetch progress -> filter progress less than 100
+    * @returns Student count (number)
+    */
+    numberOfStudentsActive: number
+    courseRating: number
+  }
+  teachers: {
+    name: string
+    teacherId: string
+    overallRating: number
+    appointmentLoad: number
+    numberOfCourses: number
+  }
 }
 
-export const columns: ColumnDef<Institute>[] = [
+export type InstituteMinimumDetail =
+  {
+    id: string
+    name: string
+    website: string
+    phoneNumber: string
+    overallRating: number
+    numberOfStudents: number
+  };
+
+export const columns: ColumnDef<InstituteMinimumDetail>[] = [
   {
     accessorKey: "name",
-    header: "Name",
-    cell: ({ row }) => (
-      <Drawer>
-        <DrawerTrigger className="flex gap-2">{row.original.name}</DrawerTrigger>
-        <DrawerContent>
-          <InstituteInfo institute={row.original} />
 
-        </DrawerContent>
-      </Drawer>
-    ),
-  },
-  {
-    accessorKey: "institution",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
+          className="flex w-full justify-center"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Institution
+          Name
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
     },
+  },
+  {
+    accessorKey: "website",
+    header: "Website",
     cell: ({ row }) => {
-      const institution = row.getValue("institution") as Institute['institution'];
+      const website = row.getValue("website") as Institute['website'];
       return (
-        <Link href={institution.website ?? ""} target="_blank">
-          {institution.name ?? ""}
+        <Link href={website ?? ""} target="_blank"  className="flex gap-2 items-center"
+        >
+          <Globe height={14} />
+          {website ?? <i>No Link Available</i>}
         </Link>
       )
     }
   },
   {
-    accessorKey: "courses",
-    header: "Courses",
+    accessorKey: "phoneNumber",
+    header: "Phone Number",
+    cell: ({ row }) => {
+      const phoneNumber = row.getValue("phoneNumber") as Institute['phoneNumber'];
+      return (
+
+        <Link
+          href={`tel:${phoneNumber}`}
+          className="flex gap-2 items-center"
+        >
+          <Phone height={14} />
+          {phoneNumber}
+
+        </Link>
+      )
+    }
   },
+
   {
-    accessorKey: "price",
+    accessorKey: "numberOfStudents",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Price
+          Number Of Students
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
     },
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("price"))
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(amount)
+  },
 
-      return <div className="text-right font-medium">{formatted}</div>
-    }
-  },
   {
-    accessorKey: "appointment Load",
-    header: "Appointment Load",
-  },
-  
-  {
-    accessorKey: "rating",
+    accessorKey: "overallRating",
     header: "Avg. Rating",
   },
   {
@@ -130,7 +148,7 @@ export const columns: ColumnDef<Institute>[] = [
     id: "actions",
     header: "Actions",
     cell: ({ row }) => {
-      const teacher = row.original
+      const institute = row.original
 
       return (
         <DropdownMenu>
@@ -143,12 +161,12 @@ export const columns: ColumnDef<Institute>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(teacher.name)}
+              onClick={() => navigator.clipboard.writeText(`Phone: ${institute.phoneNumber} ,Website: ${institute.website}`)}
             >
               Copy contact info
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="gap-2"> <Link href={`/appointments/${teacher.id}`} target="_blank">Take me there</Link>
+            <DropdownMenuItem className="gap-2"> <Link href={`/institutions/${row.original.id}`}>Take me to institue page</Link>
               <ExternalLink size={16} /></DropdownMenuItem>
             <DropdownMenuItem>Add Review</DropdownMenuItem>
           </DropdownMenuContent>

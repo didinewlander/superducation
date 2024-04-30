@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import db from "@/lib/db";
 import { findRole } from "@/lib/roles";
 import { auth } from "@/auth";
-import { redirect } from "next/navigation";
 import { getUserIdByEmail } from "@/actions/GetUser";
 
 export async function POST(
@@ -12,11 +11,12 @@ export async function POST(
   try {
     const { title } = await req.json();
     const session = await auth();
-    if (!session) return new NextResponse("Unauthorized", { status: 401 });
-
+    if (!session?.user?.email) {
+      return new NextResponse("no email", { status: 401 });
+    }
     const userId = await getUserIdByEmail(session.user?.email ?? "");
 
-    if (!userId || findRole(userId) !== "teacher") {
+    if (!userId  || (findRole(session.user?.email) !== "teacher" && findRole(session.user?.email) !== "both")) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -25,6 +25,7 @@ export async function POST(
     });
 
     if (!courseOwner) {
+      console.log("NO COURSE OWNER");
       return new NextResponse("Unauthorized", { status: 401 });
     }
 

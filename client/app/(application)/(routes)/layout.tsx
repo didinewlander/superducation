@@ -2,7 +2,6 @@ import { SessionProvider } from "next-auth/react";
 import { Navbar } from "../_components/Navbar";
 import Sidebar from "../_components/Sidebar";
 import { auth } from "@/auth";
-import { SignIn } from "@/components/auth/signin-button";
 import LoginPage from "@/components/auth/login-page";
 import NextTopLoader from 'nextjs-toploader';
 

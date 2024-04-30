@@ -9,8 +9,7 @@ const handleAuth = async () => {
   const session = await auth();
   const userId = await getUserIdByEmail(session?.user?.email ?? "");
   const role = findRole(session?.user?.email);
-
-  const isAuthorized = role === "teacher" || role === "institution";
+  const isAuthorized = role === "teacher" || role === "institution" || role === "both";
 
   if (!userId || !isAuthorized) throw new Error("Unauthorized");
   return { userId };

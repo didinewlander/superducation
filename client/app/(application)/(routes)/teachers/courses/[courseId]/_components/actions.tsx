@@ -6,8 +6,8 @@ import toast from 'react-hot-toast'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { ConfirmModal } from '@/components/modals'
 import { useConfettiStore } from '@/hooks/use-confetti'
+import { ConfirmModal } from '@/components/confirm-modal'
 
 type ActionsProps = {
   disabled?: boolean
@@ -27,7 +27,7 @@ export default function Actions({ disabled, isPublished, courseId }: ActionsProp
       await axios.delete(`/api/courses/${courseId}`)
       toast.success('Course deleted')
       router.refresh()
-      router.push(`/teachers/dashboard/courses/${courseId}`)
+      router.push(`/teachers/courses/${courseId}`)
     } catch {
       toast.error('Something went wrong!')
     } finally {

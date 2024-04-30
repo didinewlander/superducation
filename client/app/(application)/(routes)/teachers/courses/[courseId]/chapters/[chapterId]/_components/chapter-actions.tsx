@@ -6,7 +6,7 @@ import { useState } from 'react'
 import toast from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { ConfirmModal } from '@/components/modals'
+import { ConfirmModal } from '@/components/confirm-modal'
 
 interface ChapterActionsProps {
   disabled: boolean
@@ -47,7 +47,7 @@ export const ChapterActions = ({ disabled, courseId, chapterId, isPublished }: C
 
       toast.success('Chapter deleted')
       router.refresh()
-      router.push(`/teachers/dashboard/courses/${courseId}`)
+      router.push(`/teachers/courses/${courseId}`)
     } catch {
       toast.error('Something went wrong')
     } finally {

@@ -9,15 +9,14 @@ export async function PUT(req: NextRequest, { params }: { params: { courseId: st
   try {
     const session = await auth();
 
-    if (!session || findRole(session.user?.email) !== "teacher") {
-      return new NextResponse("Unauthorized", { status: 401 });
+    if (!session?.user?.email) {
+      return new NextResponse("no email", { status: 401 });
     }
     const userId = await getUserIdByEmail(session.user?.email ?? "");
-
-    if (!userId) {
+    if (!userId  || findRole(userId) !== "teacher" || findRole(userId) !=="both") {
       return new NextResponse("Unauthorized", { status: 401 });
     }
-
+    
     const { list } = await req.json()
     const courseOwner = await db.course.findUnique({ where: { id: params.courseId, createdById: userId } })
 

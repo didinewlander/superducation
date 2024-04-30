@@ -92,22 +92,22 @@ model Course {
   title            String
   createdById      String
   description      String
-  categoryId       String
+  categoryId       String?
   priceInCents     Int?
   isPublished      Boolean      @default(false)
   createdAt        DateTime     @default(now())
   updatedAt        DateTime     @updatedAt
-  syllabusId       String
-  instituteId      String
+  syllabusId       String?
+  instituteId      String?
   imageUrl         String?
   attachments      Attachment[]
   chapters         Chapter[]
-  category         Category     @relation(fields: [categoryId], references: [id])
-  syllabus         Syllabus     @relation(fields: [syllabusId], references: [id])
-  institute        Institute    @relation(fields: [instituteId], references: [id])
+  category         Category?     @relation(fields: [categoryId], references: [id])
+  syllabus         Syllabus?     @relation(fields: [syllabusId], references: [id])
+  institute        Institute?    @relation(fields: [instituteId], references: [id])
   purchases        Purchase[]
   suggestions      Suggestion[]
-  studentsEnrolled Student[]    @relation("CourseToStudent")
+  studentsEnrolled Student[]   @relation("CourseToStudent")
   courseTeachers   Teacher[]    @relation("CourseToTeacher")
 }
 

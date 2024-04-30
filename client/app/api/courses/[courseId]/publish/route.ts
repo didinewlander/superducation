@@ -8,16 +8,16 @@ import { auth } from '@/auth';
 export async function PATCH(req: NextRequest, { params }: { params: { courseId: string } }) {
   try {
     const session = await auth();
+    const { courseId } = params;
+    const values = await req.json();
 
-    if (!session || findRole(session.user?.email) !== "teacher") {
-      return new NextResponse("Unauthorized", { status: 401 });
+    if (!session?.user?.email) {
+      return new NextResponse("no email", { status: 401 });
     }
     const userId = await getUserIdByEmail(session.user?.email ?? "");
-
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
-
     const course = await db.course.findUnique({
       where: { id: params.courseId, createdById: userId },
       include: { chapters: { include: { muxData: true } } },
@@ -37,7 +37,8 @@ export async function PATCH(req: NextRequest, { params }: { params: { courseId: 
     const publishedCourse = await db.course.update({ where: { id: params.courseId }, data: { isPublished: true } })
 
     return NextResponse.json(publishedCourse)
-  } catch {
+  } catch (error){
+    console.log(error)
     return new NextResponse('Internal server error', { status: 500 })
   }
 }

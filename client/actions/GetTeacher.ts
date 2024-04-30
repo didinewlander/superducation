@@ -1,5 +1,4 @@
 import db from "@/lib/db";
-import { Teacher, User, Institute, Course, Appointment } from "@prisma/client";
 import { Teacher as TeacherType } from "@/app/(application)/(routes)/teachers/find/_components/columns";
 
 export const getAllTeachers = async (): Promise<TeacherType[] | null> => {

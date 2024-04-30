@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "local": "npm run open && next dev",
+    "open": "start http://localhost:3000",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -13,6 +15,7 @@
     "@auth/prisma-adapter": "^2.0.0",
     "@headlessui/react": "^1.7.19",
     "@headlessui/tailwindcss": "^0.2.0",
+    "@hello-pangea/dnd": "^16.6.0",
     "@hookform/resolvers": "^3.3.4",
     "@lucia-auth/adapter-prisma": "^4.0.1",
     "@mux/mux-node": "^8.5.0",
@@ -21,6 +24,7 @@
     "@node-rs/bcrypt": "^1.10.1",
     "@prisma/client": "^5.13.0",
     "@radix-ui/react-accordion": "^1.1.2",
+    "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-avatar": "^1.0.4",
     "@radix-ui/react-checkbox": "^1.0.4",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
@@ -54,6 +58,7 @@
     "qs": "^6.12.0",
     "query-string": "^9.0.0",
     "react": "^18",
+    "react-confetti": "^6.1.0",
     "react-day-picker": "^8.10.1",
     "react-dom": "^18",
     "react-hook-form": "^7.51.2",

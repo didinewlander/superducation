@@ -7,17 +7,13 @@ import { OrderAppoint } from "./OrderAppoint"
 import { ReportTeacher } from "./ReportTeacher"
 import { getTeacher } from "@/actions/GetTeacher"
 import { useEffect, useState } from "react"
-import { Appointment, Course, Institute, User } from "@prisma/client"
-import { Teacher } from "./columns"
+import { Appointment, Course, User } from "@prisma/client"
+import { InstituteMinimumDetail } from "./columns"
 
 
-type InstituteWithDetails = Institute & {
-    user: User | null;
-    teachers: Teacher[];
-    courses: Course[];
-    appointments: Appointment[];
-};
-const InstituteInfo = ({ institute }: { institute: Institute }) => {
+
+
+const InstituteInfo = ({ institute }: { institute: InstituteMinimumDetail }) => {
 
     return (
         <div className="w-full grid grid-cols-2 space-y-3">

@@ -13,12 +13,14 @@ const { video } = new Mux({tokenId:process.env.MUX_TOKEN_ID!, tokenSecret: proce
 export async function PATCH(req: NextRequest, { params }: { params: Params }) {
   try {
     const session = await auth();
-
-    if (!session || findRole(session.user?.email) !== "teacher") {
-      return new NextResponse("Unauthorized", { status: 401 });
+    if (!session?.user?.email) {
+      return new NextResponse("no email", { status: 401 });
     }
     const userId = await getUserIdByEmail(session.user?.email ?? "");
 
+    if (!userId  || (findRole(session.user?.email) !== "teacher" && findRole(session.user?.email) !== "both")) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
     // eslint-disable-next-line
     const { isPublished, ...values } = await req.json()
 

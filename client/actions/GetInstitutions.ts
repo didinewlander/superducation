@@ -1,5 +1,7 @@
+import { InstituteMinimumDetail } from "@/app/(application)/(routes)/institutions/find/_components/columns";
 import { auth } from "@/auth";
 import db from "@/lib/db";
+import { formatData } from "@/lib/utils";
 import { Institute } from "@prisma/client";
 import { NextResponse } from "next/server";
 
@@ -43,6 +45,62 @@ export const getAllInstitutions = async (): Promise<Institute[] | null> => {
     return [];
   }
 };
+
+export const getTableInstitutions = async (): Promise<
+  InstituteMinimumDetail[] | null
+> => {
+  const session = await auth();
+  if (!session) return null;
+
+  try {
+    const institutes = await db.institute.findMany({
+      where:{
+        user:{
+          isVerified: true
+        }
+      },
+      select: {
+        id: true,
+        name: true,
+        website: true,
+        phoneNumber: true,
+        students: {
+          select: {
+            _count: true,
+          },
+        },
+      
+      },
+    });
+
+    const formattedInstitutes: InstituteMinimumDetail[] = institutes.map(
+      (institute) => ({
+        id: institute.id,
+        name: institute.name,
+        website: institute.website,
+        phoneNumber: institute.phoneNumber,
+        overallRating: 10,
+        numberOfStudents: institute.students.length,
+      })
+    );
+
+    return formattedInstitutes;
+  } catch (error) {
+    console.error("[GET_ALL_INSTITUTES]", error);
+    return [];
+  }
+};
+
+/*
+*
+!!! FIX FUNCTION
+* 
+// */
+// function calculateOverallRating(suggestions: Suggestion[]): number {
+//   // Implement your rating calculation logic here
+//   // For example, you could calculate the average rating based on suggestion descriptions
+//   return suggestions.length > 0 ? 4 : 0; // Placeholder value, adjust as needed
+// }
 
 type CreateInstitute = {
   name: string;

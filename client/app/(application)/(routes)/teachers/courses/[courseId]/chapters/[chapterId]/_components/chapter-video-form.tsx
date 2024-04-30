@@ -9,7 +9,7 @@ import toast from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
 import { Chapter, MuxData } from '@prisma/client'
 import { Button } from '@/components/ui/button'
-import { FileUpload } from '@/components/file-upload'
+import { FileUpload } from '@/components/fileUpload'
 
 interface ChapterVideoFormProps {
   initialData: Chapter & { muxData?: MuxData | null }
