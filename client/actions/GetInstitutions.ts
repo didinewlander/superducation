@@ -1,6 +1,7 @@
 import { InstituteMinimumDetail } from "@/app/(application)/(routes)/institutions/find/_components/columns";
 import { auth } from "@/auth";
-import db from "@/lib/db";
+import { db } from '@/lib/db'
+
 import { formatData } from "@/lib/utils";
 import { Institute } from "@prisma/client";
 import { NextResponse } from "next/server";

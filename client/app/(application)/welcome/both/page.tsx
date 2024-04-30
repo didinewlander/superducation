@@ -1,7 +1,8 @@
 import { BothForm } from "../_components/both-form"
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
-import db from "@/lib/db";
+import { db } from '@/lib/db'
+
 
 export default async function BothPage() {
     const session = await auth();

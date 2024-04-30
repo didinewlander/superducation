@@ -1,7 +1,7 @@
 import { Avatar } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
-import db from "@/lib/db"
+import {db} from "@/lib/db"
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { OrderAppoint } from "./OrderAppoint"
 import { ReportTeacher } from "./ReportTeacher"
@@ -9,8 +9,6 @@ import { getTeacher } from "@/actions/GetTeacher"
 import { useEffect, useState } from "react"
 import { Appointment, Course, User } from "@prisma/client"
 import { InstituteMinimumDetail } from "./columns"
-
-
 
 
 const InstituteInfo = ({ institute }: { institute: InstituteMinimumDetail }) => {

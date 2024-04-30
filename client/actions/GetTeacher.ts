@@ -1,4 +1,5 @@
-import db from "@/lib/db";
+import { db } from '@/lib/db'
+
 import { Teacher as TeacherType } from "@/app/(application)/(routes)/teachers/find/_components/columns";
 
 export const getAllTeachers = async (): Promise<TeacherType[] | null> => {

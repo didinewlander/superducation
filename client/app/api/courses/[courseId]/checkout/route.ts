@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import { NextRequest, NextResponse } from "next/server";
-import db from "@/lib/db";
+import { db } from '@/lib/db'
+
 import { pay, BitPaymentRequest } from "@/lib/bitpay";
 import { getUserIdByEmail } from "@/actions/GetUser";
 

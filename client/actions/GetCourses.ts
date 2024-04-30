@@ -1,4 +1,5 @@
-import db from "@/lib/db";
+import { db } from '@/lib/db'
+
 import { Category, Course } from "@prisma/client";
 import { getProgress } from "./GetProgress";
 

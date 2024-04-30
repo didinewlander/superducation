@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Mux from "@mux/mux-node";
-import db from "@/lib/db";
+import { db } from '@/lib/db'
+
 import { findRole } from "@/lib/roles";
 import { getUserIdByEmail } from "@/actions/GetUser";
 import { auth } from "@/auth";
