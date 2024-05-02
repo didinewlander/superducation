@@ -21,6 +21,10 @@ export const FileUpload = ({
             onUploadError={(error: Error) => {
                 toast.error(`${error?.message}`)
             }}
+            appearance={{
+                button:
+                  "bg-green-500 p-2 cursor-pointer",       
+              }}
         />
     )
 }

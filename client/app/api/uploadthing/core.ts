@@ -6,9 +6,10 @@ const f = createUploadthing();
 
 const handleAuth = async () => {
   const session = await auth();
-  const userId = await getUserIdByEmail(session?.user?.email ?? "");
+  const userId = session?.info.userId;
   const role = session?.info.role;
-  const isAuthorized = role === "teacher" || role === "institution" || role === "both";
+  const isAuthorized =
+    role === "teacher" || role === "institution" || role === "both";
 
   if (!userId || !isAuthorized) throw new Error("Unauthorized");
   return { userId };
