@@ -68,7 +68,7 @@ export async function DELETE(req: NextRequest, { params }: { params: Params }) {
   try {
     const session = await auth();
 
-    if (!session || session.info.role !== "teacher") {
+    if (!session || session.info.role !== "teacher" && session.info.role !== "both") {
       return new NextResponse("Unauthorized", { status: 401 });
     }
     const userId = await getUserIdByEmail(session.user?.email ?? "");

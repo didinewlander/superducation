@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from '@/lib/db'
+import { db } from "@/lib/db";
 
 import { auth } from "@/auth";
 import { getUserIdByEmail } from "@/actions/GetUser";
@@ -11,7 +11,10 @@ export async function POST(
   try {
     const session = await auth();
     const { url } = await request.json();
-    if (!session || session.info.role !== "teacher") {
+    if (
+      !session ||
+      (session.info.role !== "teacher" && session.info.role !== "both")
+    ) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
     const userId = await getUserIdByEmail(session.user?.email ?? "");

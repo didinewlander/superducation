@@ -47,7 +47,7 @@ export async function PATCH(
     const { courseId } = params;
     const values = await req.json();
 
-    if (!session || session.info.role !== "teacher") {
+    if (!session || session.info.role !== "teacher" && session.info.role !== "both") {
       return new NextResponse("Unauthorized", { status: 401 });
     }
     const userId = await getUserIdByEmail(session.user?.email ?? "");
@@ -80,7 +80,7 @@ export async function DELETE(
   try {
     const session = await auth();
 
-    if (!session || session.info.role !== "teacher") {
+    if (!session || session.info.role !== "teacher" && session.info.role !== "both") {
       return new NextResponse("Unauthorized", { status: 401 });
     }
     const userId = await getUserIdByEmail(session.user?.email ?? "");
