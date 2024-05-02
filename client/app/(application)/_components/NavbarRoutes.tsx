@@ -6,7 +6,6 @@ import Link from 'next/link'
 
 import { Button } from '@/components/ui/button'
 import { SearchInput } from '@/components/search-input'
-import { findRole } from '@/lib/roles'
 import { signOut, useSession } from 'next-auth/react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
@@ -38,8 +37,7 @@ export const NavbarRoutes = () => {
         .map(word => word[0])
         .join('')
 
-    const role = findRole(session.data?.user?.email);
-
+    const role = session.data?.info.role;
     const pathname = usePathname()
 
     const isSearchPage = pathname?.includes('/search')

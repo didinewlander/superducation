@@ -11,7 +11,6 @@ export async function POST(
   try {
     const { userId } = params;
     const id = userId[0];
-    console.log(id);
     const {
       currentInstituteId,
       enrolledYear,

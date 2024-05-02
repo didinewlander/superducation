@@ -7,7 +7,7 @@ const WelcomePage = async (
     }) => {
     return (
         <div className="h-full">
-            <SessionProvider>
+            <SessionProvider refetchOnWindowFocus={false}>
                 {children}
             </SessionProvider>
         </div>

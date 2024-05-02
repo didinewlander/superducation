@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import Mux from "@mux/mux-node";
 import { db } from '@/lib/db'
 
-import { findRole } from "@/lib/roles";
 import { getUserIdByEmail } from "@/actions/GetUser";
 import { auth } from "@/auth";
 
@@ -48,7 +47,7 @@ export async function PATCH(
     const { courseId } = params;
     const values = await req.json();
 
-    if (!session || findRole(session.user?.email) !== "teacher") {
+    if (!session || session.info.role !== "teacher") {
       return new NextResponse("Unauthorized", { status: 401 });
     }
     const userId = await getUserIdByEmail(session.user?.email ?? "");
@@ -81,7 +80,7 @@ export async function DELETE(
   try {
     const session = await auth();
 
-    if (!session || findRole(session.user?.email) !== "teacher") {
+    if (!session || session.info.role !== "teacher") {
       return new NextResponse("Unauthorized", { status: 401 });
     }
     const userId = await getUserIdByEmail(session.user?.email ?? "");

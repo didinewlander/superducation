@@ -3,7 +3,6 @@ import { db } from '@/lib/db'
 
 
 import { auth } from '@/auth';
-import { findRole } from '@/lib/roles';
 import { getUserIdByEmail } from '@/actions/GetUser';
 
 export async function PUT(req: NextRequest, { params }: { params: { courseId: string } }) {

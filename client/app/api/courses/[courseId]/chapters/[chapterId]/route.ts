@@ -5,7 +5,6 @@ import { db } from '@/lib/db'
 
 import { auth } from '@/auth';
 import { getUserIdByEmail } from '@/actions/GetUser';
-import { findRole } from '@/lib/roles';
 
 type Params = { chapterId: string; courseId: string }
 
@@ -19,7 +18,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Params }) {
     }
     const userId = await getUserIdByEmail(session.user?.email ?? "");
 
-    if (!userId  || (findRole(session.user?.email) !== "teacher" && findRole(session.user?.email) !== "both")) {
+    if (!userId  || (session.info.role !== "teacher" && session.info.role !== "both")) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
     // eslint-disable-next-line
@@ -69,7 +68,7 @@ export async function DELETE(req: NextRequest, { params }: { params: Params }) {
   try {
     const session = await auth();
 
-    if (!session || findRole(session.user?.email) !== "teacher") {
+    if (!session || session.info.role !== "teacher") {
       return new NextResponse("Unauthorized", { status: 401 });
     }
     const userId = await getUserIdByEmail(session.user?.email ?? "");

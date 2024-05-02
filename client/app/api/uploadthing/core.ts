@@ -1,5 +1,4 @@
 import { createUploadthing, type FileRouter } from "uploadthing/next";
-import { findRole } from "@/lib/roles";
 import { getUserIdByEmail } from "@/actions/GetUser";
 import { auth } from "@/auth";
 
@@ -8,7 +7,7 @@ const f = createUploadthing();
 const handleAuth = async () => {
   const session = await auth();
   const userId = await getUserIdByEmail(session?.user?.email ?? "");
-  const role = findRole(session?.user?.email);
+  const role = session?.info.role;
   const isAuthorized = role === "teacher" || role === "institution" || role === "both";
 
   if (!userId || !isAuthorized) throw new Error("Unauthorized");

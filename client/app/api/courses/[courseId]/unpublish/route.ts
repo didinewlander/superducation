@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 
 
-import { findRole } from '@/lib/roles';
 import { getUserIdByEmail } from '@/actions/GetUser';
 import { auth } from '@/auth';
 
@@ -10,7 +9,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { courseId: 
   try {
     const session = await auth();
 
-    if (!session || findRole(session.user?.email) !== "teacher") {
+    if (!session || session.info.role !== "teacher") {
       return new NextResponse("Unauthorized", { status: 401 });
     }
     const userId = await getUserIdByEmail(session.user?.email ?? "");

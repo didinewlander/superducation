@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from '@/lib/db'
 
-import { findRole } from "@/lib/roles";
 import { auth } from "@/auth";
 import { getUserIdByEmail } from "@/actions/GetUser";
 
@@ -17,7 +16,7 @@ export async function POST(
     }
     const userId = await getUserIdByEmail(session.user?.email ?? "");
 
-    if (!userId  || (findRole(session.user?.email) !== "teacher" && findRole(session.user?.email) !== "both")) {
+    if (!userId  || (session.info.role !== "teacher" && session.info.role !== "both")) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 

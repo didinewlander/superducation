@@ -2,8 +2,7 @@ import { auth } from "@/auth";
 
 export default auth((req) => {
   const isLoggedIn = !!req.auth;
-  console.log("Session:", req.nextUrl.pathname); //  { session: { user: { ... } } }
-  console.log("Is logged in:", isLoggedIn);
+
 });
 
 // Read more: https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher

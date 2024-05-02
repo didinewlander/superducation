@@ -5,7 +5,6 @@ import { SidebarItem } from "./SidebarItem";
 import { redirect, usePathname } from "next/navigation";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { findRole } from "@/lib/roles";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
@@ -105,8 +104,7 @@ const institutionRoutes = [
 export const SidebarRoutes = () => {
     const session = useSession();
     if (!session) { redirect('/'); }
-    const role = findRole(session.data?.user?.email);
-
+    const role = session.data?.info.role;
     const isStudentPage = (role === "student");
     const isTeacherPage = (role === "teacher");
     const isTeacherAndStudentPage = (role === "both");
