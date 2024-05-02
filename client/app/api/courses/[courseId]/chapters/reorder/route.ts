@@ -13,7 +13,7 @@ export async function PUT(req: NextRequest, { params }: { params: { courseId: st
       return new NextResponse("no email", { status: 401 });
     }
     const userId = await getUserIdByEmail(session.user?.email ?? "");
-    if (!userId  || findRole(userId) !== "teacher" || findRole(userId) !=="both") {
+    if (!userId  || session.info.role !== "teacher" && session.info.role !=="both") {
       return new NextResponse("Unauthorized", { status: 401 });
     }
     
