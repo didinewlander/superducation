@@ -17,7 +17,7 @@ import { Combobox } from '@/components/ui/combobox'
 type CategoryFormProps = {
   initialData: Course
   courseId: string
-  options: Array<{ label: string; value: string }>
+  providedOptions: Array<{ id: string; name: string }>
 }
 
 const formSchema = z.object({
@@ -26,7 +26,7 @@ const formSchema = z.object({
 
 type FormSchema = z.infer<typeof formSchema>
 
-export default function CategoryForm({ initialData, courseId, options }: CategoryFormProps) {
+export default function CategoryForm({ initialData, courseId, providedOptions }: CategoryFormProps) {
   const [isEditing, setIsEditing] = useState(false)
   const router = useRouter()
 
@@ -49,7 +49,8 @@ export default function CategoryForm({ initialData, courseId, options }: Categor
       toast.error('Something went wrong!')
     }
   }
-
+  const options = providedOptions.map((category) => ({ label: category.name, value: category.id }));
+  console.log(options)
   const selectedOption = options.find((option) => option.value === initialData?.categoryId)
 
   return (

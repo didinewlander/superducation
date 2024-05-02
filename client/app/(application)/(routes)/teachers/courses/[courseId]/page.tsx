@@ -1,7 +1,9 @@
+
+import { db } from '@/lib/db'
 import { redirect } from 'next/navigation'
 import { CircleDollarSign, File, LayoutDashboard, ListChecks } from 'lucide-react'
 
-import { db } from '@/lib/db'
+
 
 import { IconBadge } from '@/components/icon-badge'
 import { TitleForm } from './_components/title-form'
@@ -18,20 +20,14 @@ import { auth } from '@/auth'
 const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
   const session = await auth();
   if (!session) redirect('/');
-  const user = await db.user.findUnique({
-    where: { email: session.user?.email ?? '' },
-    select: { id: true },
-  })
 
-  const userId = user?.id
-
-  if (!userId) {
+  if (!session.info.userId) {
     throw new Error('User not found')
   }
 
 
   const course = await db.course.findUnique({
-    where: { id: params.courseId, createdById: userId },
+    where: { id: params.courseId, createdById: session.info.userId },
     include: { attachments: { orderBy: { createdAt: 'desc' } }, chapters: { orderBy: { position: 'asc' } } },
   })
 
@@ -42,7 +38,7 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
   const categories = await db.category.findMany({
     orderBy: {
       name: 'asc',
-    },
+    }
   })
 
   const requiredFields = [
@@ -84,11 +80,7 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
             <CategoryForm
               initialData={course}
               courseId={course.id}
-              options={categories.map((category) => ({
-                label: category.name,
-                value: category.id,
-              }))}
-            />
+              providedOptions={categories} />
           </div>
           <div className="space-y-6">
             <div>
