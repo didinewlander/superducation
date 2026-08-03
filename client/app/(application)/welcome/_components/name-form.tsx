@@ -22,10 +22,10 @@ interface NameFormProps {
 }
 const roles =
     [
-        { id: 'student', label: 'Student' },
+        { id: 'institution', label: 'Institution' },
         { id: 'teacher', label: 'Teacher' },
+        { id: 'student', label: 'Student' },
         { id: 'both', label: 'Student & Teacher' },
-        { id: 'institution', label: 'Institution' }
     ] as const;
 const formSchema = z.object({
     firstName: z.string().min(2, { message: "First name is required" }),

@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "local": "npm run open && next dev",
+    "broadcast": "next dev -H 0.0.0.0 -p 3000",
     "open": "start http://localhost:3000",
     "build": "next build",
     "start": "next start",
